@@ -1,0 +1,41 @@
+@prefix :        <http://www.example.org/burning.ttl/> .
+@prefix dash:    <http://datashapes.org/dash#> .
+@prefix graphql: <http://datashapes.org/graphql#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix swa:     <http://topbraid.org/swa#> .
+@prefix tosh:    <http://topbraid.org/tosh#> .
+@prefix xml:     <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+:B001   rdf:type  :BurningOfWood , owl:NamedIndividual .
+
+:CreationOfCoal  rdf:type  owl:Class , <https://hrssilva.github.io/ontology/omice.ttl#EventType> , owl:NamedIndividual ;
+        rdfs:subClassOf  <https://hrssilva.github.io/ontology/omice.ttl#CreationEvent> ;
+        <https://hrssilva.github.io/ontology/omice.ttl#ConcernsCreationOf>
+                :NaturalCoal .
+
+:Wood   rdf:type         <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> , owl:Class , owl:NamedIndividual ;
+        rdfs:subClassOf  :Object .
+
+:C001   rdf:type  :CreationOfCoal , owl:NamedIndividual .
+
+:BurningOfWood  rdf:type  owl:Class , owl:NamedIndividual , <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+        rdfs:subClassOf  <https://hrssilva.github.io/ontology/omice.ttl#DestructionEvent> ;
+        <https://hrssilva.github.io/ontology/omice.ttl#ConcernsDestructionOf>
+                :Wood .
+
+<http://www.example.org/burning.ttl>
+        rdf:type     owl:Ontology ;
+        owl:imports  <https://hrssilva.github.io/ontology/omice.ttl> .
+
+:NaturalCoal  rdf:type   <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> , owl:Class , owl:NamedIndividual ;
+        rdfs:subClassOf  :Object .
+
+:NaturalCoal2024-07-10T15:53:11.797-03:00
+        rdf:type  owl:NamedIndividual , :NaturalCoal .
+
+:Object  rdf:type        owl:NamedIndividual , <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> , owl:Class ;
+        rdfs:subClassOf  <https://hrssilva.github.io/ontology/omice.ttl#TypeOfParticulars> .

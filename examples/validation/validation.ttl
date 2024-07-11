@@ -1,0 +1,308 @@
+@prefix : <http://www.example.org/validation.ttl/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.example.org/validation.ttl/> .
+
+<http://www.example.org/validation.ttl> rdf:type owl:Ontology ;
+                                         owl:imports <https://hrssilva.github.io/ontology/omice.ttl> .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.example.org/validation.ttl/InheresIn
+:InheresIn rdf:type owl:ObjectProperty ;
+           rdfs:domain :Quality ;
+           rdfs:range :Object .
+
+
+###  http://www.example.org/validation.ttl/ObjectRelation
+:ObjectRelation rdf:type owl:ObjectProperty ;
+                rdfs:domain :Object ;
+                rdfs:range :Object .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.example.org/validation.ttl/CorrectCreationEvent
+:CorrectCreationEvent rdf:type owl:Class ;
+                      rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#CreationEvent> .
+
+
+###  http://www.example.org/validation.ttl/CorrectDestructionEvent
+:CorrectDestructionEvent rdf:type owl:Class ;
+                         rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#DestructionEvent> .
+
+
+###  http://www.example.org/validation.ttl/CorrectQualityModificationEvent
+:CorrectQualityModificationEvent rdf:type owl:Class ;
+                                 rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/CorrectRelationModificationEvent
+:CorrectRelationModificationEvent rdf:type owl:Class ;
+                                  rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/ImmaterialObject
+:ImmaterialObject rdf:type owl:Class ;
+                  rdfs:subClassOf :Object .
+
+
+###  http://www.example.org/validation.ttl/IncorrectCreationEvent
+:IncorrectCreationEvent rdf:type owl:Class ;
+                        rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#CreationEvent> .
+
+
+###  http://www.example.org/validation.ttl/IncorrectDestructionEvent
+:IncorrectDestructionEvent rdf:type owl:Class ;
+                           rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#DestructionEvent> .
+
+
+###  http://www.example.org/validation.ttl/MaterialObject
+:MaterialObject rdf:type owl:Class ;
+                rdfs:subClassOf :Object .
+
+
+###  http://www.example.org/validation.ttl/MissingBearerQualityModificationEvent
+:MissingBearerQualityModificationEvent rdf:type owl:Class ;
+                                       rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/MissingObjectRelationModificationEvent
+:MissingObjectRelationModificationEvent rdf:type owl:Class ;
+                                        rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/MissingQualityQualityModificationEvent
+:MissingQualityQualityModificationEvent rdf:type owl:Class ;
+                                        rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/MissingRelationQualityModificationEvent
+:MissingRelationQualityModificationEvent rdf:type owl:Class ;
+                                         rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/MissingRelationRelationModificationEvent
+:MissingRelationRelationModificationEvent rdf:type owl:Class ;
+                                          rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/MissingSubjectRelationModificationEvent
+:MissingSubjectRelationModificationEvent rdf:type owl:Class ;
+                                         rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent> .
+
+
+###  http://www.example.org/validation.ttl/Object
+:Object rdf:type owl:Class ;
+        rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#TypeOfParticulars> .
+
+
+###  http://www.example.org/validation.ttl/Quality
+:Quality rdf:type owl:Class ;
+         rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#TypeOfParticulars> .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.example.org/validation.ttl#CorrectQualityModificationIndividual
+:CorrectQualityModificationIndividual rdf:type owl:NamedIndividual ,
+                                               :CorrectQualityModificationEvent .
+
+
+###  http://www.example.org/validation.ttl#CorrectRelationModificationIndividual
+:CorrectRelationModificationIndividual rdf:type owl:NamedIndividual ,
+                                                :CorrectRelationModificationEvent .
+
+
+###  http://www.example.org/validation.ttl#IO002
+:IO002 rdf:type owl:NamedIndividual ,
+                :ImmaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#BearerModifiedBy> :IncorrectQualityModificationIndividual .
+
+
+###  http://www.example.org/validation.ttl#IO003
+:IO003 rdf:type owl:NamedIndividual ,
+                :ImmaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#SubjectModifiedBy> :CorrectRelationModificationIndividual .
+
+
+###  http://www.example.org/validation.ttl#IO004
+:IO004 rdf:type owl:NamedIndividual ,
+                :ImmaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#ObjectModifiedBy> :IncorrectRelationModificationIndividual .
+
+
+###  http://www.example.org/validation.ttl#IncorrectQualityModificationIndividual
+:IncorrectQualityModificationIndividual rdf:type owl:NamedIndividual ,
+                                                 :CorrectQualityModificationEvent .
+
+
+###  http://www.example.org/validation.ttl#IncorrectRelationModificationIndividual
+:IncorrectRelationModificationIndividual rdf:type owl:NamedIndividual ,
+                                                  :CorrectRelationModificationEvent .
+
+
+###  http://www.example.org/validation.ttl#MO004
+:MO004 rdf:type owl:NamedIndividual ,
+                :MaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#SubjectModifiedBy> :IncorrectRelationModificationIndividual .
+
+
+###  http://www.example.org/validation.ttl/CorrectCreationEvent
+:CorrectCreationEvent rdf:type owl:NamedIndividual ,
+                               <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                      <https://hrssilva.github.io/ontology/omice.ttl#ConcernsCreationOf> :MaterialObject .
+
+
+###  http://www.example.org/validation.ttl/CorrectDestructionEvent
+:CorrectDestructionEvent rdf:type owl:NamedIndividual ,
+                                  <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                         <https://hrssilva.github.io/ontology/omice.ttl#ConcernsDestructionOf> :MaterialObject .
+
+
+###  http://www.example.org/validation.ttl/CorrectDestructionIndividual
+:CorrectDestructionIndividual rdf:type owl:NamedIndividual ,
+                                       :CorrectDestructionEvent .
+
+
+###  http://www.example.org/validation.ttl/CorrectQualityModificationEvent
+:CorrectQualityModificationEvent rdf:type owl:NamedIndividual ,
+                                          <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> :MaterialObject ;
+                                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> :Quality ;
+                                 <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> :InheresIn .
+
+
+###  http://www.example.org/validation.ttl/CorrectRelationModificationEvent
+:CorrectRelationModificationEvent rdf:type owl:NamedIndividual ,
+                                           <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                  <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsObject> :MaterialObject ;
+                                  <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsSubject> :Object ;
+                                  <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> :ObjectRelation .
+
+
+###  http://www.example.org/validation.ttl/DE001
+:DE001 rdf:type owl:NamedIndividual .
+
+
+###  http://www.example.org/validation.ttl/IO001
+:IO001 rdf:type owl:NamedIndividual ,
+                :ImmaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#DestroyedBy> :IncorrectDestructionIndividual .
+
+
+###  http://www.example.org/validation.ttl/ImmaterialObject
+:ImmaterialObject rdf:type owl:NamedIndividual ,
+                           <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  http://www.example.org/validation.ttl/IncorrectCreationEvent
+:IncorrectCreationEvent rdf:type owl:NamedIndividual ,
+                                 <https://hrssilva.github.io/ontology/omice.ttl#EventType> .
+
+
+###  http://www.example.org/validation.ttl/IncorrectDestructionEvent
+:IncorrectDestructionEvent rdf:type owl:NamedIndividual ,
+                                    <https://hrssilva.github.io/ontology/omice.ttl#EventType> .
+
+
+###  http://www.example.org/validation.ttl/IncorrectDestructionIndividual
+:IncorrectDestructionIndividual rdf:type owl:NamedIndividual ,
+                                         :CorrectDestructionEvent .
+
+
+###  http://www.example.org/validation.ttl/InheresIn
+:InheresIn rdf:type owl:NamedIndividual ,
+                    <https://hrssilva.github.io/ontology/omice.ttl#RelationType> .
+
+
+###  http://www.example.org/validation.ttl/MO001
+:MO001 rdf:type owl:NamedIndividual ,
+                :MaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#ObjectModifiedBy> :CorrectRelationModificationIndividual .
+
+
+###  http://www.example.org/validation.ttl/MO002
+:MO002 rdf:type owl:NamedIndividual ,
+                :MaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#BearerModifiedBy> :CorrectQualityModificationIndividual .
+
+
+###  http://www.example.org/validation.ttl/MO003
+:MO003 rdf:type owl:NamedIndividual ,
+                :MaterialObject ;
+       <https://hrssilva.github.io/ontology/omice.ttl#DestroyedBy> :CorrectDestructionIndividual .
+
+
+###  http://www.example.org/validation.ttl/MaterialObject
+:MaterialObject rdf:type owl:NamedIndividual ,
+                         <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  http://www.example.org/validation.ttl/MissingBearerQualityModificationEvent
+:MissingBearerQualityModificationEvent rdf:type owl:NamedIndividual ,
+                                                <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                       <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> :Quality ;
+                                       <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> :InheresIn .
+
+
+###  http://www.example.org/validation.ttl/MissingObjectRelationModificationEvent
+:MissingObjectRelationModificationEvent rdf:type owl:NamedIndividual ,
+                                                 <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                        <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsSubject> :MaterialObject ;
+                                        <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> :ObjectRelation .
+
+
+###  http://www.example.org/validation.ttl/MissingQualityQualityModificationEvent
+:MissingQualityQualityModificationEvent rdf:type owl:NamedIndividual ,
+                                                 <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                        <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> :MaterialObject ;
+                                        <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> :ObjectRelation .
+
+
+###  http://www.example.org/validation.ttl/MissingRelationQualityModificationEvent
+:MissingRelationQualityModificationEvent rdf:type owl:NamedIndividual ,
+                                                  <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                         <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> :MaterialObject ;
+                                         <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> :Quality .
+
+
+###  http://www.example.org/validation.ttl/MissingRelationRelationModificationEvent
+:MissingRelationRelationModificationEvent rdf:type owl:NamedIndividual ,
+                                                   <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                          <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsObject> :MaterialObject ;
+                                          <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsSubject> :MaterialObject .
+
+
+###  http://www.example.org/validation.ttl/MissingSubjectRelationModificationEvent
+:MissingSubjectRelationModificationEvent rdf:type owl:NamedIndividual ,
+                                                  <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                                         <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsObject> :MaterialObject ;
+                                         <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> :ObjectRelation .
+
+
+###  http://www.example.org/validation.ttl/Object
+:Object rdf:type owl:NamedIndividual ,
+                 <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  http://www.example.org/validation.ttl/ObjectRelation
+:ObjectRelation rdf:type owl:NamedIndividual ,
+                         <https://hrssilva.github.io/ontology/omice.ttl#RelationType> .
+
+
+###  http://www.example.org/validation.ttl/Quality
+:Quality rdf:type owl:NamedIndividual ,
+                  <https://hrssilva.github.io/ontology/omice.ttl#QualityType> .
+
+
+###  Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi

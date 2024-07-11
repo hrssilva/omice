@@ -1,0 +1,145 @@
+@prefix :        <http://www.example.org/validation.ttl/> .
+@prefix dash:    <http://datashapes.org/dash#> .
+@prefix graphql: <http://datashapes.org/graphql#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix swa:     <http://topbraid.org/swa#> .
+@prefix tosh:    <http://topbraid.org/tosh#> .
+@prefix xml:     <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+[ rdf:type     sh:ValidationReport ;
+  sh:conforms  false ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingRelationRelationModificationEvent ;
+                 sh:resultMessage              "A ModificationEvent class should concern a relation that may relate two individuals." ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#ModificationEventRelationTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventTypeShape> ;
+                 sh:value                      :MissingRelationRelationModificationEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingQualityQualityModificationEvent ;
+                 sh:resultMessage              "A QualityModificationEvent class should concern exactly one quality class." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:MinCountConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventQualityCardinality>
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingRelationQualityModificationEvent ;
+                 sh:resultMessage              "A ModificationEvent class should concern a relation that may relate two individuals." ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#ModificationEventRelationTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventTypeShape> ;
+                 sh:value                      :MissingRelationQualityModificationEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingSubjectRelationModificationEvent ;
+                 sh:resultMessage              "A RelationModificationEvent class should concern an object class whose individuals may be subjects of modification." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsSubject> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventSubjectTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventTypeShape> ;
+                 sh:value                      :MissingSubjectRelationModificationEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingBearerQualityModificationEvent ;
+                 sh:resultMessage              "A QualityModificationEvent class should concern exactly one object class whose individuals may be subjects of modification." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:MinCountConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventSubjectCardinality>
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingSubjectRelationModificationEvent ;
+                 sh:resultMessage              "A RelationModificationEvent class should concern exactly one object class, whose individuals may be subjects to the concerned relation." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsSubject> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:MinCountConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventSubjectCardinality>
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingObjectRelationModificationEvent ;
+                 sh:resultMessage              "A RelationModificationEvent class should concern an object class whose individuals may be objects of modification." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsObject> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventTypeShape> ;
+                 sh:value                      :MissingObjectRelationModificationEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :IncorrectCreationEvent ;
+                 sh:resultMessage              "A CreationEvent class should concern the creation of an individual of ObjectType." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsCreationOf> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#CreationEventTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#CreationEventTypeShape> ;
+                 sh:value                      :IncorrectCreationEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingQualityQualityModificationEvent ;
+                 sh:resultMessage              "A QualityModificationEvent class should concern a quality class whose individuals may be objects of modification." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventQualityTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventTypeShape> ;
+                 sh:value                      :MissingQualityQualityModificationEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :IncorrectDestructionIndividual ;
+                 sh:resultMessage              "A DestructionEvent should have an object of the concerned object class being destroyed by it." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#DestroyedBy> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#DestructionEventConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#DestructionEventShape> ;
+                 sh:value                      :IncorrectDestructionIndividual
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :MissingObjectRelationModificationEvent ;
+                 sh:resultMessage              "A RelationModificationEvent class should concern exactly one object class, whose individuals may be objects to the concerned relation." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsObject> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraintComponent  sh:MinCountConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectCardinality>
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :IncorrectRelationModificationIndividual ;
+                 sh:resultMessage              "A RelationModificationEvent should have an object of the concerned object class as object of the concerned relation." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ObjectModifiedBy> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventShape> ;
+                 sh:value                      :IncorrectRelationModificationIndividual
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :IncorrectDestructionEvent ;
+                 sh:resultMessage              "A DestructionEvent class should concern the destruction of an individual of ObjectType." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#ConcernsDestructionOf> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#DestructionEventTypeConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#DestructionEventTypeShape> ;
+                 sh:value                      :IncorrectDestructionEvent
+               ] ;
+  sh:result    [ rdf:type                      sh:ValidationResult ;
+                 sh:focusNode                  :IncorrectQualityModificationIndividual ;
+                 sh:resultMessage              "A QualityModificationEvent should have an object of the concerned object class as bearer of the concerned quality." ;
+                 sh:resultPath                 <https://hrssilva.github.io/ontology/omice.ttl#BearerModifiedBy> ;
+                 sh:resultSeverity             sh:Violation ;
+                 sh:sourceConstraint           <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventBearerConstraint> ;
+                 sh:sourceConstraintComponent  sh:SPARQLConstraintComponent ;
+                 sh:sourceShape                <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventShape> ;
+                 sh:value                      :IncorrectQualityModificationIndividual
+               ]
+] .
