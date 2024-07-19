@@ -1,0 +1,22 @@
+name: Push File
+
+on: push
+
+jobs:
+  copy-file:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Pushes test file
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source_file: 'omice.ttl'
+        destination_repo: 'hrssilva/hrssilva.github.io'
+        destination_folder: 'ontology'
+        user_email: 'haroldo.rssilva@gmail.com'
+        user_name: 'hrssilva'
+        commit_message: 'Updated Ontology'
