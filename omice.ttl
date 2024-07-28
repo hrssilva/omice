@@ -991,15 +991,15 @@ prefix owl: <http://www.w3.org/2002/07/owl#>
 prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT ?entity
 WHERE {
-    {?entity a owl:Ontology .}
+    {
+        ?entity a owl:Class ;
+                a owl:NamedIndividual .
+    }
     UNION
-    {?entity a owl:Class .}
-    UNION
-    {?entity a owl:AnnotationProperty .}
-    UNION
-    {?entity a owl:ObjectProperty .}
-    UNION
-    {?entity a owl:DataProperty .}
+    {
+        ?entity ?p ?o .
+        FILTER NOT EXISTS {?entity a owl:NamedIndividual}
+    }
 }
 """ .
 
