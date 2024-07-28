@@ -1,0 +1,22 @@
+PREFIX o3po: <https://www.petwin.org/o3po-resources/o3po#>
+PREFIX ovip: <https://www.petwin.org/o3po-resources/o3po-vip#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX core: <https://purl.industrialontologies.org/ontology/core/Core/>
+PREFIX ex: <http://www.example.org/well.ttl#>
+ASK
+WHERE {
+  ?bot a o3po:ICV ;
+        o3po:feeds_fluid_to+ ?v1;
+        o3po:connected_to*/o3po:component_of* ex:PWELL001 .
+  FILTER NOT EXISTS {?bot ^core:qualityOf [ a ex:not_operational ] } .
+  ?v1 a/rdfs:subClassOf* o3po:valve ;
+        o3po:feeds_fluid_to+ ?v2 .
+  ?q1 core:qualityOf ?v1 ;
+     a ex:operational .
+  ?v2 a/rdfs:subClassOf* o3po:valve ;
+      o3po:feeds_fluid_to* ?top .
+  ?q2 core:qualityOf ?v2 ;
+     a ex:operational .
+  ?top o3po:component_of ex:FPSO001 .
+
+}

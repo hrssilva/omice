@@ -1,0 +1,351 @@
+@prefix : <http://www.example.org/well.ttl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.example.org/well.ttl#> .
+
+<http://www.example.org/well.ttl> rdf:type owl:Ontology ;
+                                   owl:imports <https://hrssilva.github.io/ontology/omice.ttl> ,
+                                               <https://www.petwin.org/o3po-resources/o3po/0.1> .
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.obolibrary.org/obo/BFO_0000001
+<http://purl.obolibrary.org/obo/BFO_0000001> rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#TypeOfParticulars> .
+
+
+###  http://www.example.org/well.ttl#ClosingOfValve
+:ClosingOfValve rdf:type owl:Class ;
+                rdfs:subClassOf <https://spec.industrialontologies.org/ontology/core/Core/Event> ,
+                                [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                                                         owl:someValuesFrom :GiveValveClosedState
+                                                       ]
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                                                         owl:someValuesFrom :RemoveValveOperationalState
+                                                       ]
+                                                     ) ;
+                                  rdf:type owl:Class
+                                ] .
+
+
+###  http://www.example.org/well.ttl#GiveValveClosedState
+:GiveValveClosedState rdf:type owl:Class ;
+                      rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/well.ttl#GiveValveOpenState
+:GiveValveOpenState rdf:type owl:Class ;
+                    rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/well.ttl#OpeningOfValve
+:OpeningOfValve rdf:type owl:Class ;
+                rdfs:subClassOf <https://spec.industrialontologies.org/ontology/core/Core/Event> ,
+                                [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                                                         owl:someValuesFrom :GiveValveOpenState
+                                                       ]
+                                                       [ rdf:type owl:Restriction ;
+                                                         owl:onProperty <http://purl.obolibrary.org/obo/BFO_0000051> ;
+                                                         owl:someValuesFrom :RemoveValveOperationalState
+                                                       ]
+                                                     ) ;
+                                  rdf:type owl:Class
+                                ] .
+
+
+###  http://www.example.org/well.ttl#RemoveValveOperationalState
+:RemoveValveOperationalState rdf:type owl:Class ;
+                             rdfs:subClassOf <https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent> .
+
+
+###  http://www.example.org/well.ttl#not_operational
+:not_operational rdf:type owl:Class ;
+                 rdfs:subClassOf <https://www.petwin.org/o3po-resources/o3po-vip#operational_state> .
+
+
+###  http://www.example.org/well.ttl#operational
+:operational rdf:type owl:Class ;
+             rdfs:subClassOf <https://www.petwin.org/o3po-resources/o3po-vip#operational_state> .
+
+
+###  https://hrssilva.github.io/ontology/omice.ttl#Event
+<https://hrssilva.github.io/ontology/omice.ttl#Event> owl:equivalentClass <https://spec.industrialontologies.org/ontology/core/Core/Event> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po-vip#dhsv
+<https://www.petwin.org/o3po-resources/o3po-vip#dhsv> rdf:type owl:Class ;
+                                                      rdfs:subClassOf <https://www.petwin.org/o3po-resources/o3po#valve> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po-vip#master_valve
+<https://www.petwin.org/o3po-resources/o3po-vip#master_valve> rdf:type owl:Class ;
+                                                              rdfs:subClassOf <https://www.petwin.org/o3po-resources/o3po#valve> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po-vip#operational_state
+<https://www.petwin.org/o3po-resources/o3po-vip#operational_state> rdf:type owl:Class ;
+                                                                   rdfs:subClassOf <http://purl.obolibrary.org/obo/BFO_0000019> ,
+                                                                                   [ rdf:type owl:Restriction ;
+                                                                                     owl:onProperty <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> ;
+                                                                                     owl:someValuesFrom <http://purl.obolibrary.org/obo/BFO_0000040>
+                                                                                   ] .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.example.org/well.ttl#ANNULUS001
+:ANNULUS001 rdf:type owl:NamedIndividual ,
+                     <https://www.petwin.org/o3po-resources/o3po#annulus> ;
+            <http://purl.obolibrary.org/obo/BFO_0000050> :PWELL001 .
+
+
+###  http://www.example.org/well.ttl#BASIN001
+:BASIN001 rdf:type owl:NamedIndividual ,
+                   <https://www.petwin.org/o3po-resources/o3po#basin> .
+
+
+###  http://www.example.org/well.ttl#CLOSED_ICV002
+:CLOSED_ICV002 rdf:type owl:NamedIndividual ,
+                        :not_operational ;
+               <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> :ICV002 .
+
+
+###  http://www.example.org/well.ttl#DHSV001
+:DHSV001 rdf:type owl:NamedIndividual ,
+                  <https://www.petwin.org/o3po-resources/o3po-vip#dhsv> ;
+         <https://www.petwin.org/o3po-resources/o3po#connected_to> :WELLHEAD001 ;
+         <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :WELLHEAD001 .
+
+
+###  http://www.example.org/well.ttl#FIELD001
+:FIELD001 rdf:type owl:NamedIndividual ,
+                   <https://www.petwin.org/o3po-resources/o3po#field> ;
+          <http://purl.obolibrary.org/obo/RO_0001025> :BASIN001 .
+
+
+###  http://www.example.org/well.ttl#FLOWLINE001
+:FLOWLINE001 rdf:type owl:NamedIndividual ,
+                      <https://www.petwin.org/o3po-resources/o3po#flowline> ;
+             <https://www.petwin.org/o3po-resources/o3po#connected_to> :PLATFORMCHOKE001 ;
+             <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :PLATFORMCHOKE001 .
+
+
+###  http://www.example.org/well.ttl#FPSO001
+:FPSO001 rdf:type owl:NamedIndividual ,
+                  <https://www.petwin.org/o3po-resources/o3po#FPSO> ;
+         <http://purl.obolibrary.org/obo/RO_0001025> :FIELD001 ;
+         <https://www.petwin.org/o3po-resources/o3po#component_of> :PLANT001 .
+
+
+###  http://www.example.org/well.ttl#GiveValveClosedState
+:GiveValveClosedState rdf:type owl:NamedIndividual ,
+                               <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                      <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> <https://www.petwin.org/o3po-resources/o3po#valve> ;
+                      <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> :not_operational ;
+                      <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> <https://spec.industrialontologies.org/ontology/core/Core/qualityOf> .
+
+
+###  http://www.example.org/well.ttl#GiveValveOpenState
+:GiveValveOpenState rdf:type owl:NamedIndividual ,
+                             <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                    <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> <https://www.petwin.org/o3po-resources/o3po#valve> ;
+                    <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> :operational ;
+                    <https://hrssilva.github.io/ontology/omice.ttl#GivesRelation> <https://spec.industrialontologies.org/ontology/core/Core/qualityOf> .
+
+
+###  http://www.example.org/well.ttl#ICV001
+:ICV001 rdf:type owl:NamedIndividual ,
+                 <https://www.petwin.org/o3po-resources/o3po#ICV> ;
+        <https://www.petwin.org/o3po-resources/o3po#connected_to> :UPPER_COLUMN001 ;
+        <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :UPPER_COLUMN001 .
+
+
+###  http://www.example.org/well.ttl#ICV002
+:ICV002 rdf:type owl:NamedIndividual ,
+                 <https://www.petwin.org/o3po-resources/o3po#ICV> ;
+        <https://www.petwin.org/o3po-resources/o3po#connected_to> :MIDDLE_COLUMN001 ;
+        <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :MIDDLE_COLUMN001 .
+
+
+###  http://www.example.org/well.ttl#ICV003
+:ICV003 rdf:type owl:NamedIndividual ,
+                 <https://www.petwin.org/o3po-resources/o3po#ICV> ;
+        <https://www.petwin.org/o3po-resources/o3po#connected_to> :LOWER_COLUMN001 ;
+        <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :LOWER_COLUMN001 .
+
+
+###  http://www.example.org/well.ttl#LOWER_ANNULUS001
+:LOWER_ANNULUS001 rdf:type owl:NamedIndividual ,
+                           <https://www.petwin.org/o3po-resources/o3po#annulus> ;
+                  <http://purl.obolibrary.org/obo/BFO_0000050> :ANNULUS001 .
+
+
+###  http://www.example.org/well.ttl#LOWER_COLUMN001
+:LOWER_COLUMN001 rdf:type owl:NamedIndividual ,
+                          <https://www.petwin.org/o3po-resources/o3po#tubing> ;
+                 <https://www.petwin.org/o3po-resources/o3po#connected_to> :MIDDLE_COLUMN001 ;
+                 <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :MIDDLE_COLUMN001 .
+
+
+###  http://www.example.org/well.ttl#MASTERVALVE001
+:MASTERVALVE001 rdf:type owl:NamedIndividual ,
+                         <https://www.petwin.org/o3po-resources/o3po-vip#master_valve> ;
+                <https://www.petwin.org/o3po-resources/o3po#component_of> :TREE001 ;
+                <https://www.petwin.org/o3po-resources/o3po#connected_to> :FLOWLINE001 ;
+                <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :FLOWLINE001 .
+
+
+###  http://www.example.org/well.ttl#MIDDLE_ANNULUS001
+:MIDDLE_ANNULUS001 rdf:type owl:NamedIndividual ;
+                   <http://purl.obolibrary.org/obo/BFO_0000050> :ANNULUS001 .
+
+
+###  http://www.example.org/well.ttl#MIDDLE_COLUMN001
+:MIDDLE_COLUMN001 rdf:type owl:NamedIndividual ,
+                           <https://www.petwin.org/o3po-resources/o3po#tubing> ;
+                  <https://www.petwin.org/o3po-resources/o3po#connected_to> :UPPER_COLUMN001 ;
+                  <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :UPPER_COLUMN001 .
+
+
+###  http://www.example.org/well.ttl#OPEN_CHOKE001
+:OPEN_CHOKE001 rdf:type owl:NamedIndividual ,
+                        :operational ;
+               <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> :PLATFORMCHOKE001 .
+
+
+###  http://www.example.org/well.ttl#OPEN_DHSV001
+:OPEN_DHSV001 rdf:type owl:NamedIndividual ,
+                       :operational ;
+              <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> :DHSV001 .
+
+
+###  http://www.example.org/well.ttl#OPEN_ICV001
+:OPEN_ICV001 rdf:type owl:NamedIndividual ,
+                      :operational ;
+             <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> :ICV001 .
+
+
+###  http://www.example.org/well.ttl#OPEN_ICV003
+:OPEN_ICV003 rdf:type owl:NamedIndividual ,
+                      :operational ;
+             <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> :ICV003 .
+
+
+###  http://www.example.org/well.ttl#OPEN_MASTER001
+:OPEN_MASTER001 rdf:type owl:NamedIndividual ,
+                         :operational ;
+                <https://purl.industrialontologies.org/ontology/core/Core/qualityOf> :MASTERVALVE001 .
+
+
+###  http://www.example.org/well.ttl#PLANT001
+:PLANT001 rdf:type owl:NamedIndividual ,
+                   <https://www.petwin.org/o3po-resources/o3po#plant> ;
+          <http://purl.obolibrary.org/obo/RO_0001025> :FIELD001 .
+
+
+###  http://www.example.org/well.ttl#PLATFORMCHOKE001
+:PLATFORMCHOKE001 rdf:type owl:NamedIndividual ,
+                           <https://www.petwin.org/o3po-resources/o3po#choke> ;
+                  <https://www.petwin.org/o3po-resources/o3po#component_of> :FPSO001 .
+
+
+###  http://www.example.org/well.ttl#PWELL001
+:PWELL001 rdf:type owl:NamedIndividual ,
+                   <https://www.petwin.org/o3po-resources/o3po#Production_Well> .
+
+
+###  http://www.example.org/well.ttl#RemoveValveOperationalState
+:RemoveValveOperationalState rdf:type owl:NamedIndividual ,
+                                      <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
+                             <https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf> <https://www.petwin.org/o3po-resources/o3po#valve> ;
+                             <https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality> <https://www.petwin.org/o3po-resources/o3po-vip#operational_state> ;
+                             <https://hrssilva.github.io/ontology/omice.ttl#RemovesRelation> <https://spec.industrialontologies.org/ontology/core/Core/qualityOf> .
+
+
+###  http://www.example.org/well.ttl#TREE001
+:TREE001 rdf:type owl:NamedIndividual ,
+                  <https://www.petwin.org/o3po-resources/o3po#SubseaTree> .
+
+
+###  http://www.example.org/well.ttl#UPPER_ANNULUS001
+:UPPER_ANNULUS001 rdf:type owl:NamedIndividual ,
+                           <https://www.petwin.org/o3po-resources/o3po#annulus> ;
+                  <http://purl.obolibrary.org/obo/BFO_0000050> :ANNULUS001 .
+
+
+###  http://www.example.org/well.ttl#UPPER_COLUMN001
+:UPPER_COLUMN001 rdf:type owl:NamedIndividual ,
+                          <https://www.petwin.org/o3po-resources/o3po#tubing> ;
+                 <https://www.petwin.org/o3po-resources/o3po#connected_to> :DHSV001 ;
+                 <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :DHSV001 .
+
+
+###  http://www.example.org/well.ttl#WELLBORE001
+:WELLBORE001 rdf:type owl:NamedIndividual ,
+                      <https://www.petwin.org/o3po-resources/o3po#Borehole> ;
+             <http://purl.obolibrary.org/obo/BFO_0000050> :PWELL001 .
+
+
+###  http://www.example.org/well.ttl#WELLHEAD001
+:WELLHEAD001 rdf:type owl:NamedIndividual ,
+                      <https://www.petwin.org/o3po-resources/o3po#Wellhead> ;
+             <https://www.petwin.org/o3po-resources/o3po#component_of> :PWELL001 ;
+             <https://www.petwin.org/o3po-resources/o3po#connected_to> :MASTERVALVE001 ;
+             <https://www.petwin.org/o3po-resources/o3po#feeds_fluid_to> :MASTERVALVE001 .
+
+
+###  http://www.example.org/well.ttl#not_operational
+:not_operational rdf:type owl:NamedIndividual ,
+                          <https://hrssilva.github.io/ontology/omice.ttl#QualityType> .
+
+
+###  http://www.example.org/well.ttl#operational
+:operational rdf:type owl:NamedIndividual ,
+                      <https://hrssilva.github.io/ontology/omice.ttl#QualityType> .
+
+
+###  https://spec.industrialontologies.org/ontology/core/Core/qualityOf
+<https://spec.industrialontologies.org/ontology/core/Core/qualityOf> rdf:type owl:NamedIndividual ,
+                                                                              <https://hrssilva.github.io/ontology/omice.ttl#RelationType> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po#ICV
+<https://www.petwin.org/o3po-resources/o3po#ICV> rdf:type owl:NamedIndividual ,
+                                                          <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po#choke
+<https://www.petwin.org/o3po-resources/o3po#choke> rdf:type owl:NamedIndividual ,
+                                                            <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po#valve
+<https://www.petwin.org/o3po-resources/o3po#valve> rdf:type owl:NamedIndividual ,
+                                                            <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po-vip#dhsv
+<https://www.petwin.org/o3po-resources/o3po-vip#dhsv> rdf:type owl:NamedIndividual ,
+                                                               <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po-vip#master_valve
+<https://www.petwin.org/o3po-resources/o3po-vip#master_valve> rdf:type owl:NamedIndividual ,
+                                                                       <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> .
+
+
+###  https://www.petwin.org/o3po-resources/o3po-vip#operational_state
+<https://www.petwin.org/o3po-resources/o3po-vip#operational_state> rdf:type owl:NamedIndividual ,
+                                                                            <https://hrssilva.github.io/ontology/omice.ttl#QualityType> .
+
+
+###  Generated by the OWL API (version 4.5.26.2023-07-17T20:34:13Z) https://github.com/owlcs/owlapi
