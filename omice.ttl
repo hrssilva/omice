@@ -487,6 +487,7 @@ omice:DiscardLossRelationsRule rdf:type owl:NamedIndividual ,
                                         sh:SPARQLRule ;
                                sh:construct """
                                 prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
+                                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
                                 CONSTRUCT {
                                             $this ?r ?o .
                                 }
@@ -495,7 +496,8 @@ omice:DiscardLossRelationsRule rdf:type owl:NamedIndividual ,
                                             NOT EXISTS {
                                             $this :SubjectModifiedBy ?event .
                                             ?o :ObjectModifiedBy ?event .
-                                            ?event :RemovesRelation ?r .
+                                            ?event a ?ec .
+                                            ?ec :RemovesRelation ?r .
                                             }
                                             NOT EXISTS {
                                             $this :DestroyedBy ?event .
@@ -590,7 +592,8 @@ NOT EXISTS {?entity a owl:Class .}
 {
     {
         ?entity :SubjectModifiedBy | :BearerModifiedBy ?event .
-        ?event :RemovesRelation ?p .
+        ?event a ?ec .
+        ?ec :RemovesRelation ?p .
     }
     UNION
     {
@@ -773,30 +776,6 @@ WHERE {
 ###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent
 omice:RelationModificationEvent rdf:type owl:NamedIndividual ,
                                          omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventDecrementShape
-omice:RelationModificationEventDecrementShape rdf:type owl:NamedIndividual ,
-                                                       sh:NodeShape ;
-                                              rdfs:comment "Validates that all restrictions on individuals of RelationModificationEvent are being correctly modeled, when there is removal of quality" ;
-                                              sh:sparql omice:RelationModificationEventRemoveQualityConstraint ;
-                                              sh:target omice:RelationModificationEventDecrementTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventDecrementTarget
-omice:RelationModificationEventDecrementTarget rdf:type owl:NamedIndividual ,
-                                                        sh:SPARQLTarget ;
-                                               rdfs:comment "Targets all subclasses of RelationModificationEvent that are of type EventType and that remove a quality" ;
-                                               sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a ?eventclass .
-?eventclass rdfs:subClassOf+ :RelationModificationEvent ;
-            :RemovesRelation ?r .
-}""" .
 
 
 ###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectCardinality
@@ -1020,7 +999,8 @@ NOT EXISTS {?entity a owl:Class .}
 NOT EXISTS {
     {
     ?entity :SubjectModifiedBy | :BearerModifiedBy ?event .
-    ?event :RemovesRelation ?p .
+    ?event a ?ec .
+    ?ec :RemovesRelation ?p .
     }
     UNION
     {
