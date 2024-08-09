@@ -11,19 +11,33 @@
 @prefix xml:     <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-:M001   rdf:type  owl:NamedIndividual , :Marriage .
+:Divorce  rdf:type             owl:NamedIndividual , omice:EventType , owl:Class;
+        rdfs:subClassOf        omice:RelationModificationEvent;
+        omice:ConcernsModificationAsObject
+                :Person;
+        omice:ConcernsModificationAsSubject
+                :Person;
+        omice:RemovesRelation  :MarriedTo .
 
-:Object  rdf:type        owl:Class , omice:ObjectType , owl:NamedIndividual;
+:Object  rdf:type        omice:ObjectType , owl:Class , owl:NamedIndividual;
         rdfs:subClassOf  omice:TypeOfParticulars .
 
-:P001   rdf:type                 :Person , owl:NamedIndividual;
-        :MarriedTo               :P002;
-        omice:SubjectModifiedBy  :M001 .
+:D001   rdf:type  owl:NamedIndividual , :Divorce .
 
 :P002   rdf:type                :Person , owl:NamedIndividual;
-        omice:ObjectModifiedBy  :M001 .
+        omice:ObjectModifiedBy  :D001 .
 
-:Marriage  rdf:type          omice:EventType , owl:Class , owl:NamedIndividual;
+<http://www.example.org/marriage.ttl>
+        rdf:type     owl:Ontology;
+        owl:imports  <https://hrssilva.github.io/ontology/omice.ttl> .
+
+:P001   rdf:type                 :Person , owl:NamedIndividual;
+        omice:SubjectModifiedBy  :D001 .
+
+:Person  rdf:type        omice:ObjectType , owl:Class , owl:NamedIndividual;
+        rdfs:subClassOf  :Object .
+
+:Marriage  rdf:type          omice:EventType , owl:NamedIndividual , owl:Class;
         rdfs:subClassOf      omice:RelationModificationEvent;
         omice:ConcernsModificationAsObject
                 :Person;
@@ -31,14 +45,6 @@
                 :Person;
         omice:GivesRelation  :MarriedTo .
 
-:MarriedTo  rdf:type  omice:RelationType , owl:NamedIndividual , owl:ObjectProperty , owl:SymmetricProperty;
+:MarriedTo  rdf:type  owl:SymmetricProperty , omice:RelationType , owl:ObjectProperty , owl:NamedIndividual;
         rdfs:domain  :Person;
         rdfs:range   :Person .
-
-:Person  rdf:type        owl:Class , omice:ObjectType , owl:NamedIndividual;
-        rdfs:subClassOf  :Object .
-        
-<http://www.example.org/marriage.ttl>
-        rdf:type     owl:Ontology;
-        owl:imports  <https://hrssilva.github.io/ontology/omice.ttl> .
-

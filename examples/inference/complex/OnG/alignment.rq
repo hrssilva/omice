@@ -1,5 +1,4 @@
 PREFIX o3po: <https://www.petwin.org/o3po-resources/o3po#>
-PREFIX ovip: <https://www.petwin.org/o3po-resources/o3po-vip#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX core: <https://purl.industrialontologies.org/ontology/core/Core/>
 PREFIX ex: <http://www.example.org/well.ttl#>

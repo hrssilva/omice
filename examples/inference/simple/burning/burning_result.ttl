@@ -1,6 +1,7 @@
 @prefix :        <http://www.example.org/burning.ttl/> .
 @prefix dash:    <http://datashapes.org/dash#> .
 @prefix graphql: <http://datashapes.org/graphql#> .
+@prefix omice:   <https://hrssilva.github.io/ontology/omice.ttl#> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
@@ -10,32 +11,32 @@
 @prefix xml:     <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-:B001   rdf:type  :BurningOfWood , owl:NamedIndividual .
+:Object  rdf:type        owl:Class , owl:NamedIndividual , omice:ObjectType;
+        rdfs:subClassOf  omice:TypeOfParticulars .
 
-:CreationOfCoal  rdf:type  owl:Class , <https://hrssilva.github.io/ontology/omice.ttl#EventType> , owl:NamedIndividual ;
-        rdfs:subClassOf  <https://hrssilva.github.io/ontology/omice.ttl#CreationEvent> ;
-        <https://hrssilva.github.io/ontology/omice.ttl#ConcernsCreationOf>
-                :NaturalCoal .
+:CreationOfCoal  rdf:type         owl:Class , omice:EventType , owl:NamedIndividual;
+        rdfs:subClassOf           omice:CreationEvent;
+        omice:ConcernsCreationOf  :NaturalCoal .
 
-:Wood   rdf:type         <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> , owl:Class , owl:NamedIndividual ;
+        
+:NaturalCoal  rdf:type   owl:Class , owl:NamedIndividual , omice:ObjectType;
         rdfs:subClassOf  :Object .
-
-:C001   rdf:type  :CreationOfCoal , owl:NamedIndividual .
-
-:BurningOfWood  rdf:type  owl:Class , owl:NamedIndividual , <https://hrssilva.github.io/ontology/omice.ttl#EventType> ;
-        rdfs:subClassOf  <https://hrssilva.github.io/ontology/omice.ttl#DestructionEvent> ;
-        <https://hrssilva.github.io/ontology/omice.ttl#ConcernsDestructionOf>
-                :Wood .
 
 <http://www.example.org/burning.ttl>
-        rdf:type     owl:Ontology ;
+        rdf:type     owl:Ontology;
         owl:imports  <https://hrssilva.github.io/ontology/omice.ttl> .
 
-:NaturalCoal  rdf:type   <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> , owl:Class , owl:NamedIndividual ;
+:Wood   rdf:type         owl:Class , omice:ObjectType , owl:NamedIndividual;
         rdfs:subClassOf  :Object .
 
-:NaturalCoal2024-07-10T15:53:11.797-03:00
+:B001   rdf:type  :BurningOfWood , owl:NamedIndividual .
+
+:BurningOfWood  rdf:type             owl:NamedIndividual , omice:EventType , owl:Class;
+        rdfs:subClassOf              omice:DestructionEvent;
+        omice:ConcernsDestructionOf  :Wood .
+
+:C001   rdf:type  owl:NamedIndividual , :CreationOfCoal .
+
+:NaturalCoal2024-08-09T16:33:25.174-03:00
         rdf:type  owl:NamedIndividual , :NaturalCoal .
 
-:Object  rdf:type        owl:NamedIndividual , <https://hrssilva.github.io/ontology/omice.ttl#ObjectType> , owl:Class ;
-        rdfs:subClassOf  <https://hrssilva.github.io/ontology/omice.ttl#TypeOfParticulars> .

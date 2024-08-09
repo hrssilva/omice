@@ -11,17 +11,17 @@
 @prefix xml:     <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-:M001   rdf:type  owl:NamedIndividual , :Marriage .
+:D001   rdf:type  owl:NamedIndividual , :Divorce .
 
 :Object  rdf:type        owl:Class , omice:ObjectType , owl:NamedIndividual;
         rdfs:subClassOf  omice:TypeOfParticulars .
 
 :P001   rdf:type                 :Person , owl:NamedIndividual;
         :MarriedTo               :P002;
-        omice:SubjectModifiedBy  :M001 .
+        omice:SubjectModifiedBy  :D001 .
 
 :P002   rdf:type                :Person , owl:NamedIndividual;
-        omice:ObjectModifiedBy  :M001 .
+        omice:ObjectModifiedBy  :D001 .
 
 :Marriage  rdf:type          omice:EventType , owl:Class , owl:NamedIndividual;
         rdfs:subClassOf      omice:RelationModificationEvent;
@@ -30,6 +30,14 @@
         omice:ConcernsModificationAsSubject
                 :Person;
         omice:GivesRelation  :MarriedTo .
+
+:Divorce  rdf:type          omice:EventType , owl:Class , owl:NamedIndividual;
+        rdfs:subClassOf      omice:RelationModificationEvent;
+        omice:ConcernsModificationAsObject
+                :Person;
+        omice:ConcernsModificationAsSubject
+                :Person;
+        omice:RemovesRelation  :MarriedTo .
 
 :MarriedTo  rdf:type  omice:RelationType , owl:NamedIndividual , owl:ObjectProperty , owl:SymmetricProperty;
         rdfs:domain  :Person;
