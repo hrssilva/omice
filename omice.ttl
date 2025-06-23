@@ -1,1014 +1,157 @@
-@prefix : <https://hrssilva.github.io/ontology/omice.ttl#> .
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix xml: <http://www.w3.org/XML/1998/namespace> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix omice: <https://hrssilva.github.io/ontology/omice.ttl#> .
-@base <https://hrssilva.github.io/ontology/omice.ttl> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <https://hrssilva.github.io/ontology/omice.ttl?v=2.0#> .
+@base <https://hrssilva.github.io/ontology/omice.ttl>
+
+### Ontology Metadata
+<https://hrssilva.github.io/ontology/omice.ttl> a owl:Ontology ;
+    owl:versionIRI <https://hrssilva.github.io/ontology/omice.ttl?v=2.0> ;
+    owl:versionInfo "2.0" .
+
+### Metatypes
+omice:TypeOfTypes a owl:Class .
+
+omice:ObjectType a owl:Class ;
+    rdfs:subClassOf omice:TypeOfTypes .
+
+omice:QualityType a owl:Class ;
+    rdfs:subClassOf omice:TypeOfTypes .
+
+omice:RelationType a owl:Class ;
+    rdfs:subClassOf omice:TypeOfTypes .
+
+omice:EventType a owl:Class ;
+    rdfs:subClassOf omice:TypeOfTypes .
+
+omice:DispositionType a owl:Class ;
+    rdfs:subClassOf omice:TypeOfTypes ;
+    rdfs:comment "A type-level disposition that describes the potential for change in an entity." .
+
+### Particulars
+omice:TypeOfParticulars a owl:Class .
+
+omice:Impetus a owl:Class ;
+    rdfs:subClassOf omice:TypeOfParticulars ;
+    rdfs:comment "A vector representing the direction and magnitude of a disposition’s influence over a quality domain." .
+
+omice:QualityDomain a owl:Class ;
+    rdfs:subClassOf omice:TypeOfParticulars ;
+    rdfs:comment "A domain over which a quality or disposition is defined, modeled as a vector space." .
+
+omice:DomainDimension a owl:Class ;
+    rdfs:subClassOf omice:TypeOfParticulars ;
+    rdfs:comment "A dimension of a quality domain, forming a basis for vector representation." .
+
+omice:Event a owl:Class ;
+    rdfs:subClassOf omice:TypeOfParticulars .
 
-<https://hrssilva.github.io/ontology/omice.ttl> rdf:type owl:Ontology .
+omice:CreationEvent a owl:Class ;
+    rdfs:subClassOf omice:Event .
+
+omice:DestructionEvent a owl:Class ;
+    rdfs:subClassOf omice:Event .
+
+omice:ModificationEvent a owl:Class ;
+    rdfs:subClassOf omice:Event .
 
-#################################################################
-#    Annotation properties
-#################################################################
+omice:RelationModificationEvent a owl:Class ;
+    rdfs:subClassOf omice:ModificationEvent .
 
-###  http://www.w3.org/ns/shacl#alternativePath
-sh:alternativePath rdf:type owl:AnnotationProperty .
+omice:QualityModificationEvent a owl:Class ;
+    rdfs:subClassOf omice:ModificationEvent .
 
+### Quality Value Change Event
+omice:QualityValueChangeEvent a owl:Class ;
+    rdfs:subClassOf omice:QualityModificationEvent ;
+    rdfs:comment "An event in which the value of a quality changes, potentially due to the manifestation of one or more dispositions." .
 
-###  http://www.w3.org/ns/shacl#construct
-sh:construct rdf:type owl:AnnotationProperty .
+omice:affectsQuality a owl:ObjectProperty ;
+    rdfs:domain omice:QualityValueChangeEvent ;
+    rdfs:range omice:QualityType ;
+    rdfs:comment "Specifies the quality affected by the value change." .
 
+omice:manifestedDisposition a owl:ObjectProperty ;
+    rdfs:domain omice:QualityValueChangeEvent ;
+    rdfs:range omice:DispositionType ;
+    rdfs:comment "Indicates a disposition that manifests during the event and contributes to the change in quality." .
 
-###  http://www.w3.org/ns/shacl#maxCount
-sh:maxCount rdf:type owl:AnnotationProperty .
+### Structural Properties
+omice:influencesQuality a owl:ObjectProperty ;
+    rdfs:domain omice:DispositionType ;
+    rdfs:range omice:QualityType ;
+    rdfs:comment "Indicates which quality type is influenced by a disposition." .
 
+omice:hasImpetusType a owl:ObjectProperty ;
+    rdfs:domain omice:DispositionType ;
+    rdfs:range omice:ImpetusType ;
+    rdfs:comment "Relates a disposition type to its vector-based impetus over a quality domain." .
 
-###  http://www.w3.org/ns/shacl#message
-sh:message rdf:type owl:AnnotationProperty .
+omice:overDomain a owl:ObjectProperty ;
+    rdfs:domain omice:ImpetusType ;
+    rdfs:range omice:QualityDomain ;
+    rdfs:comment "Declares the quality domain over which this impetus vector is defined." .
 
+omice:hasDimension a owl:ObjectProperty ;
+    rdfs:domain omice:QualityDomain ;
+    rdfs:range omice:DomainDimension ;
+    rdfs:comment "Identifies dimensions within a quality domain." .
 
-###  http://www.w3.org/ns/shacl#minCount
-sh:minCount rdf:type owl:AnnotationProperty .
+omice:hasComponent a owl:ObjectProperty ;
+    rdfs:domain omice:ImpetusType ;
+    rdfs:range omice:VectorComponent ;
+    rdfs:comment "Links an impetus vector to its component along a domain dimension." .
 
+omice:VectorComponent a owl:Class ;
+    rdfs:subClassOf omice:TypeOfParticulars ;
+    rdfs:comment "A scalar value associated with a domain dimension in an impetus vector." .
 
-###  http://www.w3.org/ns/shacl#order
-sh:order rdf:type owl:AnnotationProperty .
+omice:onDimension a owl:ObjectProperty ;
+    rdfs:domain omice:VectorComponent ;
+    rdfs:range omice:DomainDimension ;
+    rdfs:comment "The domain dimension to which this vector component belongs." .
 
+omice:hasValue a owl:DatatypeProperty ;
+    rdfs:domain omice:VectorComponent ;
+    rdfs:range xsd:float ;
+    rdfs:comment "The numeric value of the vector component along its dimension." .
 
-###  http://www.w3.org/ns/shacl#path
-sh:path rdf:type owl:AnnotationProperty .
+### Illustrative Example (Fragility and Break Event)
+omice:StructuralIntegrityDomain a omice:QualityDomain ;
+    omice:hasDimension omice:CompressiveStrain, omice:TensileStrain .
 
+omice:CompressiveStrain a omice:DomainDimension ;
+    rdfs:comment "Longitudinal compressive strain in the material." .
 
-###  http://www.w3.org/ns/shacl#prefixes
-sh:prefixes rdf:type owl:AnnotationProperty .
+omice:TensileStrain a omice:DomainDimension ;
+    rdfs:comment "Longitudinal tensile strain in the material." .
 
+omice:Fragility a omice:DispositionType ;
+    omice:influencesQuality omice:StructuralIntegrity ;
+    omice:hasImpetusType omice:FragilityVector .
 
-###  http://www.w3.org/ns/shacl#property
-sh:property rdf:type owl:AnnotationProperty .
+omice:StructuralIntegrity a omice:QualityType .
 
+omice:FragilityVector a omice:ImpetusType ;
+    omice:overDomain omice:StructuralIntegrityDomain ;
+    omice:hasComponent omice:VecX, omice:VecY .
 
-###  http://www.w3.org/ns/shacl#rule
-sh:rule rdf:type owl:AnnotationProperty .
+omice:VecX a omice:VectorComponent ;
+    omice:onDimension omice:CompressiveStrain ;
+    omice:hasValue 0.8 .
 
+omice:VecY a omice:VectorComponent ;
+    omice:onDimension omice:TensileStrain ;
+    omice:hasValue 0.3 .
 
-###  http://www.w3.org/ns/shacl#select
-sh:select rdf:type owl:AnnotationProperty .
+### Break Event Type and Instance
+omice:BreakEvent a owl:Class ;
+    rdfs:subClassOf omice:QualityValueChangeEvent ;
+    rdfs:comment "An event representing the breaking of a structure due to loss of structural integrity." .
 
+omice:BreakEvent1 a omice:BreakEvent ;
+    omice:affectsQuality omice:StructuralIntegrity ;
+    omice:manifestedDisposition omice:Fragility .
 
-###  http://www.w3.org/ns/shacl#sparql
-sh:sparql rdf:type owl:AnnotationProperty .
-
-
-###  http://www.w3.org/ns/shacl#target
-sh:target rdf:type owl:AnnotationProperty .
-
-
-#################################################################
-#    Object Properties
-#################################################################
-
-###  https://hrssilva.github.io/ontology/omice.ttl#BearerModifiedBy
-omice:BearerModifiedBy rdf:type owl:ObjectProperty ;
-                       rdfs:subPropertyOf omice:ModifiedBy ;
-                       rdfs:range omice:QualityModificationEvent .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsCreationOf
-omice:ConcernsCreationOf rdf:type owl:ObjectProperty ;
-                         rdfs:subPropertyOf omice:ConcernsObject ;
-                         rdfs:domain omice:EventType ;
-                         rdfs:range omice:ObjectType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsDestructionOf
-omice:ConcernsDestructionOf rdf:type owl:ObjectProperty ;
-                            rdfs:subPropertyOf omice:ConcernsObject ;
-                            rdfs:domain omice:EventType ;
-                            rdfs:range omice:ObjectType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsObject
-omice:ConcernsModificationAsObject rdf:type owl:ObjectProperty ;
-                                   rdfs:subPropertyOf omice:ConcernsModificationOf .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationAsSubject
-omice:ConcernsModificationAsSubject rdf:type owl:ObjectProperty ;
-                                    rdfs:subPropertyOf omice:ConcernsModificationOf .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsModificationOf
-omice:ConcernsModificationOf rdf:type owl:ObjectProperty ;
-                             rdfs:subPropertyOf omice:ConcernsObject ;
-                             rdfs:domain omice:EventType ;
-                             rdfs:range omice:ObjectType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsObject
-omice:ConcernsObject rdf:type owl:ObjectProperty ;
-                     rdfs:subPropertyOf omice:ConcernsType ;
-                     rdfs:domain omice:EventType ;
-                     rdfs:range omice:ObjectType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsQuality
-omice:ConcernsQuality rdf:type owl:ObjectProperty ;
-                      rdfs:subPropertyOf omice:ConcernsType ;
-                      rdfs:domain omice:EventType ;
-                      rdfs:range omice:QualityType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsRelation
-omice:ConcernsRelation rdf:type owl:ObjectProperty ;
-                       rdfs:subPropertyOf omice:ConcernsType ;
-                       rdfs:domain omice:EventType ;
-                       rdfs:range omice:RelationType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ConcernsType
-omice:ConcernsType rdf:type owl:ObjectProperty ;
-                   rdfs:domain omice:EventType ;
-                   rdfs:range omice:TypeOfTypes .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestroyedBy
-omice:DestroyedBy rdf:type owl:ObjectProperty ;
-                  rdfs:subPropertyOf omice:ParticipatesIn ;
-                  rdfs:domain omice:TypeOfParticulars ;
-                  rdfs:range [ rdf:type owl:Class ;
-                               owl:unionOf ( omice:DestructionEvent
-                                             omice:QualityModificationEvent
-                                           )
-                             ] .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#GivesRelation
-omice:GivesRelation rdf:type owl:ObjectProperty ;
-                    rdfs:subPropertyOf omice:ConcernsRelation ;
-                    rdfs:domain omice:EventType ;
-                    rdfs:range omice:RelationType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ModifiedBy
-omice:ModifiedBy rdf:type owl:ObjectProperty ;
-                 rdfs:subPropertyOf omice:ParticipatesIn ;
-                 rdfs:domain omice:TypeOfParticulars ;
-                 rdfs:range omice:ModificationEvent .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ObjectModifiedBy
-omice:ObjectModifiedBy rdf:type owl:ObjectProperty ;
-                       rdfs:subPropertyOf omice:ModifiedBy ;
-                       rdfs:range omice:RelationModificationEvent .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ParticipatesIn
-omice:ParticipatesIn rdf:type owl:ObjectProperty ;
-                     rdfs:subPropertyOf owl:topObjectProperty ;
-                     rdfs:domain omice:TypeOfParticulars ;
-                     rdfs:range omice:Event .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RemovesRelation
-omice:RemovesRelation rdf:type owl:ObjectProperty ;
-                      rdfs:subPropertyOf omice:ConcernsRelation ;
-                      rdfs:domain omice:EventType ;
-                      rdfs:range omice:RelationType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#SubjectModifiedBy
-omice:SubjectModifiedBy rdf:type owl:ObjectProperty ;
-                        rdfs:subPropertyOf omice:ModifiedBy ;
-                        rdfs:range omice:RelationModificationEvent .
-
-
-#################################################################
-#    Classes
-#################################################################
-
-###  http://www.w3.org/ns/shacl#NodeShape
-sh:NodeShape rdf:type owl:Class .
-
-
-###  http://www.w3.org/ns/shacl#PropertyShape
-sh:PropertyShape rdf:type owl:Class .
-
-
-###  http://www.w3.org/ns/shacl#SPARQLConstraint
-sh:SPARQLConstraint rdf:type owl:Class .
-
-
-###  http://www.w3.org/ns/shacl#SPARQLRule
-sh:SPARQLRule rdf:type owl:Class .
-
-
-###  http://www.w3.org/ns/shacl#SPARQLTarget
-sh:SPARQLTarget rdf:type owl:Class .
-
-
-###  http://www.w3.org/ns/shacl#shape
-sh:shape rdf:type owl:Class .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#CreationEvent
-omice:CreationEvent rdf:type owl:Class ;
-                    rdfs:subClassOf omice:Event ;
-                    owl:disjointWith omice:DestructionEvent ,
-                                     omice:QualityModificationEvent ,
-                                     omice:RelationModificationEvent .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEvent
-omice:DestructionEvent rdf:type owl:Class ;
-                       rdfs:subClassOf omice:Event ,
-                                       [ rdf:type owl:Restriction ;
-                                         owl:onProperty [ owl:inverseOf omice:DestroyedBy
-                                                        ] ;
-                                         owl:someValuesFrom omice:TypeOfParticulars
-                                       ] ;
-                       owl:disjointWith omice:QualityModificationEvent ,
-                                        omice:RelationModificationEvent .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#Event
-omice:Event rdf:type owl:Class ;
-            rdfs:subClassOf omice:TypeOfParticulars .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#EventType
-omice:EventType rdf:type owl:Class ;
-                rdfs:subClassOf omice:TypeOfTypes ;
-                owl:disjointWith omice:ObjectType ,
-                                 omice:QualityType ,
-                                 omice:RelationType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ModificationEvent
-omice:ModificationEvent rdf:type owl:Class ;
-                        rdfs:subClassOf omice:Event .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ObjectType
-omice:ObjectType rdf:type owl:Class ;
-                 rdfs:subClassOf omice:TypeOfTypes ;
-                 owl:disjointWith omice:QualityType ,
-                                  omice:RelationType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent
-omice:QualityModificationEvent rdf:type owl:Class ;
-                               rdfs:subClassOf omice:ModificationEvent ,
-                                               [ rdf:type owl:Restriction ;
-                                                 owl:onProperty [ owl:inverseOf omice:BearerModifiedBy
-                                                                ] ;
-                                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                 owl:onClass omice:TypeOfParticulars
-                                               ] ;
-                               owl:disjointWith omice:RelationModificationEvent .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityType
-omice:QualityType rdf:type owl:Class ;
-                  rdfs:subClassOf omice:TypeOfTypes ;
-                  owl:disjointWith omice:RelationType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent
-omice:RelationModificationEvent rdf:type owl:Class ;
-                                rdfs:subClassOf omice:ModificationEvent ,
-                                                [ owl:intersectionOf ( [ rdf:type owl:Restriction ;
-                                                                         owl:onProperty [ owl:inverseOf omice:ObjectModifiedBy
-                                                                                        ] ;
-                                                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                                         owl:onClass omice:TypeOfParticulars
-                                                                       ]
-                                                                       [ rdf:type owl:Restriction ;
-                                                                         owl:onProperty [ owl:inverseOf omice:SubjectModifiedBy
-                                                                                        ] ;
-                                                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                                         owl:onClass omice:TypeOfParticulars
-                                                                       ]
-                                                                     ) ;
-                                                  rdf:type owl:Class
-                                                ] .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationType
-omice:RelationType rdf:type owl:Class ;
-                   rdfs:subClassOf omice:TypeOfTypes .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#TypeOfParticulars
-omice:TypeOfParticulars rdf:type owl:Class ;
-                        owl:disjointWith omice:TypeOfTypes .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#TypeOfTypes
-omice:TypeOfTypes rdf:type owl:Class .
-
-
-#################################################################
-#    Individuals
-#################################################################
-
-###  https://hrssilva.github.io/ontology/omice.ttl#CreationEvent
-omice:CreationEvent rdf:type owl:NamedIndividual ,
-                             omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#CreationEventTypeConstraint
-omice:CreationEventTypeConstraint rdf:type owl:NamedIndividual ,
-                                           sh:SPARQLConstraint ;
-                                  sh:message "A CreationEvent class should concern the creation of an individual of ObjectType." ;
-                                  sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?objectclass
-WHERE {
-BIND(:ConcernsCreationOf as ?path)
-NOT EXISTS {
-$this ?path ?objectclass .
-?objectclass a :ObjectType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#CreationEventTypeShape
-omice:CreationEventTypeShape rdf:type owl:NamedIndividual ,
-                                      sh:NodeShape ;
-                             rdfs:comment "Validates that all type restrictions on subclasses of CreationEvent are being correctly modeled" ;
-                             sh:sparql omice:CreationEventTypeConstraint ;
-                             sh:target omice:CreationEventTypeTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#CreationEventTypeTarget
-omice:CreationEventTypeTarget rdf:type owl:NamedIndividual ,
-                                       sh:SPARQLTarget ;
-                              rdfs:comment "Targets all subclasses of CreationEvent that are of type EventType" ;
-                              sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a :EventType ;
-             rdfs:subClassOf+ :CreationEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#CreationRule
-omice:CreationRule rdf:type owl:NamedIndividual ,
-                            sh:SPARQLRule ;
-                   sh:construct """
-                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-                                prefix owl: <http://www.w3.org/2002/07/owl#>
-                                CONSTRUCT {
-                                            ?s a owl:NamedIndividual, ?c .
-                                }
-                                WHERE {
-                                            $this a ?ec .
-                                            ?ec :ConcernsCreationOf ?c .
-                                            BIND(IRI(CONCAT(STR(?c), STR(NOW()))) as ?s) .
-                                }
-                                """ ;
-                   sh:order 0 .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEvent
-omice:DestructionEvent rdf:type owl:NamedIndividual ,
-                                omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEventConstraint
-omice:DestructionEventConstraint rdf:type owl:NamedIndividual ,
-                                          sh:SPARQLConstraint ;
-                                 sh:message "A DestructionEvent should have an object of the concerned object class being destroyed by it." ;
-                                 sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  ?object ?path $this
-WHERE {
-BIND(:DestroyedBy as ?path)
-NOT EXISTS {
-?object ?path $this .
-$this a ?destructionevent .
-?destructionevent :ConcernsDestructionOf ?objectclass .
-?object a/rdfs:subClassOf* ?objectclass .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEventShape
-omice:DestructionEventShape rdf:type owl:NamedIndividual ,
-                                     sh:NodeShape ;
-                            rdfs:comment "Validates that all restrictions on individuals of DestructionEvent are being correctly modeled" ;
-                            sh:sparql omice:DestructionEventConstraint ;
-                            sh:target omice:DestructionEventTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEventTarget
-omice:DestructionEventTarget rdf:type owl:NamedIndividual ,
-                                      sh:SPARQLTarget ;
-                             rdfs:comment "Targets all subclasses of DestructionEvent that are of type EventType" ;
-                             sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a ?eventclass .
-?eventclass rdfs:subClassOf+ :DestructionEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEventTypeConstraint
-omice:DestructionEventTypeConstraint rdf:type owl:NamedIndividual ,
-                                              sh:SPARQLConstraint ;
-                                     sh:message "A DestructionEvent class should concern the destruction of an individual of ObjectType." ;
-                                     sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?objectclass
-WHERE {
-BIND(:ConcernsDestructionOf as ?path)
-NOT EXISTS {
-$this ?path ?objectclass .
-?objectclass a :ObjectType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEventTypeShape
-omice:DestructionEventTypeShape rdf:type owl:NamedIndividual ,
-                                         sh:NodeShape ;
-                                rdfs:comment "Validates that all type restrictions on subclasses of DestructionEvent are being correctly modeled" ;
-                                sh:sparql omice:DestructionEventTypeConstraint ;
-                                sh:target omice:DestructionEventTypeTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DestructionEventTypeTarget
-omice:DestructionEventTypeTarget rdf:type owl:NamedIndividual ,
-                                          sh:SPARQLTarget ;
-                                 rdfs:comment "Targets all subclasses of DestructionEvent that are of type EventType" ;
-                                 sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a :EventType ;
-             rdfs:subClassOf+ :DestructionEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DiscardLossObjectsRule
-omice:DiscardLossObjectsRule rdf:type owl:NamedIndividual ,
-                                      sh:SPARQLRule ;
-                             sh:construct """
-                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-                                CONSTRUCT {
-                                            $this ?r ?o .
-                                }
-                                WHERE {
-                                            $this ?r ?o
-                                            NOT EXISTS {
-                                            ?o :DestroyedBy ?event .
-                                            }
-                                }
-                                """ ;
-                             sh:order 1 .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#DiscardLossRelationsRule
-omice:DiscardLossRelationsRule rdf:type owl:NamedIndividual ,
-                                        sh:SPARQLRule ;
-                               sh:construct """
-                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-                                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                                CONSTRUCT {
-                                            $this ?r ?o .
-                                }
-                                WHERE {
-                                            $this ?r ?o .
-                                            NOT EXISTS {
-                                            $this :SubjectModifiedBy ?event .
-                                            ?o :ObjectModifiedBy ?event .
-                                            ?event a ?ec .
-                                            ?ec :RemovesRelation ?r .
-                                            }
-                                            NOT EXISTS {
-                                            $this :DestroyedBy ?event .
-                                            }
-                                }
-                                """ ;
-                               sh:order 1 .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#Event
-omice:Event rdf:type owl:NamedIndividual ,
-                     omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#GainsQualityRule
-omice:GainsQualityRule rdf:type owl:NamedIndividual ,
-                                sh:SPARQLRule ;
-                       sh:construct """
-                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-                                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                                prefix owl: <http://www.w3.org/2002/07/owl#>
-                                CONSTRUCT {
-                                            ?s a owl:NamedIndividual, ?qc .
-                                            ?s ?r $this .
-                                }
-                                WHERE {
-                                        $this :BearerModifiedBy ?e .
-                                        ?e a ?ec .
-                                        ?ec :GivesRelation ?r .
-                                        ?ec :ConcernsQuality ?qc .
-                                        BIND(IRI(CONCAT(STR(?qc), STR(NOW()))) as ?s) .
-                                }
-                                """ ;
-                       sh:order 1 .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#GainsRelationRule
-omice:GainsRelationRule rdf:type owl:NamedIndividual ,
-                                 sh:SPARQLRule ;
-                        sh:construct """
-                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-                                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                                prefix owl: <http://www.w3.org/2002/07/owl#>
-                                CONSTRUCT {
-                                            $this ?r ?o .
-                                }
-                                WHERE {
-                                        $this :SubjectModifiedBy ?e .
-                                        ?e a ?ec .
-                                        ?ec :GivesRelation ?r .
-                                        ?o :ObjectModifiedBy ?e .
-                                }
-                                """ ;
-                        sh:order 1 .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ModificationEvent
-omice:ModificationEvent rdf:type owl:NamedIndividual ,
-                                 omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ModificationEventRelationTypeConstraint
-omice:ModificationEventRelationTypeConstraint rdf:type owl:NamedIndividual ,
-                                                       sh:SPARQLConstraint ;
-                                              sh:message "A ModificationEvent class should concern a relation that may relate two individuals." ;
-                                              sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?relation
-WHERE {
-NOT EXISTS {
-$this ?path ?relation .
-FILTER (?path IN (:GivesRelation, :RemovesRelation) ) .
-?relation a :RelationType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#PossibleLossIndividualsTarget
-omice:PossibleLossIndividualsTarget rdf:type owl:NamedIndividual ,
-                                             sh:SPARQLTarget ;
-                                    rdfs:comment "Targets all individuals that do not loose properties or cease to exist by result of an EventType" ;
-                                    sh:select """
-prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a owl:NamedIndividual .
-NOT EXISTS {?entity a owl:Class .}
-{
-    {
-        ?entity :SubjectModifiedBy | :BearerModifiedBy ?event .
-        ?event a ?ec .
-        ?ec :RemovesRelation ?p .
-    }
-    UNION
-    {
-        ?entity :DestroyedBy ?event .
-    }
-}
-}
-""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEvent
-omice:QualityModificationEvent rdf:type owl:NamedIndividual ,
-                                        omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventBearerConstraint
-omice:QualityModificationEventBearerConstraint rdf:type owl:NamedIndividual ,
-                                                        sh:SPARQLConstraint ;
-                                               sh:message "A QualityModificationEvent should have an object of the concerned object class as bearer of the concerned quality." ;
-                                               sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  ?object ?path $this
-WHERE {
-BIND(:BearerModifiedBy as ?path)
-NOT EXISTS {
-?object ?path $this .
-$this a ?eventclass .
-?eventclass :ConcernsModificationOf ?objectclass .
-?object a/rdfs:subClassOf* ?objectclass .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventDecrementShape
-omice:QualityModificationEventDecrementShape rdf:type owl:NamedIndividual ,
-                                                      sh:NodeShape ;
-                                             rdfs:comment "Validates that all restrictions on individuals of QualityModificationEvent are being correctly modeled, when there is removal of quality" ;
-                                             sh:sparql omice:QualityModificationEventRemoveQualityConstraint ;
-                                             sh:target omice:QualityModificationEventDecrementTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventDecrementTarget
-omice:QualityModificationEventDecrementTarget rdf:type owl:NamedIndividual ,
-                                                       sh:SPARQLTarget ;
-                                              rdfs:comment "Targets all subclasses of QualityModificationEvent that are of type EventType and that remove a quality" ;
-                                              sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a ?eventclass .
-?eventclass rdfs:subClassOf+ :QualityModificationEvent ;
-            :RemovesRelation ?r .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventQualityCardinality
-omice:QualityModificationEventQualityCardinality rdf:type owl:NamedIndividual ,
-                                                          sh:PropertyShape ;
-                                                 sh:maxCount 1 ;
-                                                 sh:message "A QualityModificationEvent class should concern exactly one quality class." ;
-                                                 sh:minCount 1 ;
-                                                 sh:path omice:ConcernsQuality .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventQualityTypeConstraint
-omice:QualityModificationEventQualityTypeConstraint rdf:type owl:NamedIndividual ,
-                                                             sh:SPARQLConstraint ;
-                                                    sh:message "A QualityModificationEvent class should concern a quality class whose individuals may be objects of modification." ;
-                                                    sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?relation
-WHERE {
-BIND(:ConcernsQuality as ?path)
-NOT EXISTS {
-$this ?path ?entity .
-?entity a :QualityType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventRemoveQualityConstraint
-omice:QualityModificationEventRemoveQualityConstraint rdf:type owl:NamedIndividual ,
-                                                               sh:SPARQLConstraint ;
-                                                      sh:message "A QualityModificationEvent that removes a relation should have a quality of the concerned quality class being destroyed by it." ;
-                                                      sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  ?quality ?path $this
-WHERE {
-BIND(:DestroyedBy as ?path)
-NOT EXISTS {
-?quality ?path $this .
-$this a ?qualityeventclass .
-?qualityeventclass :RemovesRelation ?r ;
-                   :ConcernsQuality ?qualityclass .
-?quality a/rdfs:subClassOf* ?qualityclass .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventShape
-omice:QualityModificationEventShape rdf:type owl:NamedIndividual ,
-                                             sh:NodeShape ;
-                                    rdfs:comment "Validates that all restrictions on individuals of QualityModificationEvent are being correctly modeled" ;
-                                    sh:sparql omice:QualityModificationEventBearerConstraint ;
-                                    sh:target omice:QualityModificationEventTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventSubjectCardinality
-omice:QualityModificationEventSubjectCardinality rdf:type owl:NamedIndividual ,
-                                                          sh:PropertyShape ;
-                                                 sh:maxCount 1 ;
-                                                 sh:message "A QualityModificationEvent class should concern exactly one object class whose individuals may be subjects of modification." ;
-                                                 sh:minCount 1 ;
-                                                 sh:path omice:ConcernsModificationOf .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventSubjectTypeConstraint
-omice:QualityModificationEventSubjectTypeConstraint rdf:type owl:NamedIndividual ,
-                                                             sh:SPARQLConstraint ;
-                                                    sh:message "A QualityModificationEvent class should concern an object class whose individuals may be subjects of modification." ;
-                                                    sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?relation
-WHERE {
-BIND(:ConcernsModificationOf as ?path)
-NOT EXISTS {
-$this ?path ?entity .
-?entity a :ObjectType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventTarget
-omice:QualityModificationEventTarget rdf:type owl:NamedIndividual ,
-                                              sh:SPARQLTarget ;
-                                     rdfs:comment "Targets all subclasses of QualityModificationEvent that are of type EventType" ;
-                                     sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a ?eventclass .
-?eventclass rdfs:subClassOf+ :QualityModificationEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventTypeShape
-omice:QualityModificationEventTypeShape rdf:type owl:NamedIndividual ,
-                                                 sh:NodeShape ;
-                                        rdfs:comment "Validates that all type restrictions on subclasses of QualityModificationEvent are being correctly modeled" ;
-                                        sh:property omice:QualityModificationEventQualityCardinality ,
-                                                    omice:QualityModificationEventSubjectCardinality ;
-                                        sh:sparql omice:ModificationEventRelationTypeConstraint ,
-                                                  omice:QualityModificationEventQualityTypeConstraint ;
-                                        sh:target omice:QualityModificationEventTypeTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#QualityModificationEventTypeTarget
-omice:QualityModificationEventTypeTarget rdf:type owl:NamedIndividual ,
-                                                  sh:SPARQLTarget ;
-                                         rdfs:comment "Targets all subclasses of QualityModificationEvent that are of type EventType" ;
-                                         sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a :EventType ;
-             rdfs:subClassOf+ :QualityModificationEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEvent
-omice:RelationModificationEvent rdf:type owl:NamedIndividual ,
-                                         omice:EventType .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectCardinality
-omice:RelationModificationEventObjectCardinality rdf:type owl:NamedIndividual ,
-                                                          sh:PropertyShape ;
-                                                 sh:maxCount 1 ;
-                                                 sh:message "A RelationModificationEvent class should concern exactly one object class, whose individuals may be objects to the concerned relation." ;
-                                                 sh:minCount 1 ;
-                                                 sh:path omice:ConcernsModificationAsObject .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectConstraint
-omice:RelationModificationEventObjectConstraint rdf:type owl:NamedIndividual ,
-                                                         sh:SPARQLConstraint ;
-                                                sh:message "A RelationModificationEvent should have an object of the concerned object class as object of the concerned relation." ;
-                                                sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  ?object ?path $this
-WHERE {
-BIND(:ObjectModifiedBy as ?path)
-NOT EXISTS {
-?object ?path $this .
-$this a ?eventclass .
-?eventclass :ConcernsModificationAsObject ?objectclass .
-?object a/rdfs:subClassOf* ?objectclass .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventObjectTypeConstraint
-omice:RelationModificationEventObjectTypeConstraint rdf:type owl:NamedIndividual ,
-                                                             sh:SPARQLConstraint ;
-                                                    sh:message "A RelationModificationEvent class should concern an object class whose individuals may be objects of modification." ;
-                                                    sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?entity
-WHERE {
-BIND(:ConcernsModificationAsObject as ?path)
-NOT EXISTS {
-$this ?path ?entity .
-?entity a :ObjectType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventShape
-omice:RelationModificationEventShape rdf:type owl:NamedIndividual ,
-                                              sh:NodeShape ;
-                                     rdfs:comment "Validates that all restrictions on individuals of RelationModificationEvent are being correctly modeled" ;
-                                     sh:sparql omice:RelationModificationEventObjectConstraint ,
-                                               omice:RelationModificationEventSubjectConstraint ;
-                                     sh:target omice:RelationModificationEventTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventSubjectCardinality
-omice:RelationModificationEventSubjectCardinality rdf:type owl:NamedIndividual ,
-                                                           sh:PropertyShape ;
-                                                  sh:maxCount 1 ;
-                                                  sh:message "A RelationModificationEvent class should concern exactly one object class, whose individuals may be subjects to the concerned relation." ;
-                                                  sh:minCount 1 ;
-                                                  sh:path omice:ConcernsModificationAsSubject .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventSubjectConstraint
-omice:RelationModificationEventSubjectConstraint rdf:type owl:NamedIndividual ,
-                                                          sh:SPARQLConstraint ;
-                                                 sh:message "A RelationModificationEvent should have an object of the concerned object class as subject of the concerned relation." ;
-                                                 sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  ?object ?path $this
-WHERE {
-BIND(:SubjectModifiedBy as ?path)
-NOT EXISTS {
-?object ?path $this .
-$this a ?eventclass .
-?eventclass :ConcernsModificationAsSubject ?objectclass .
-?object a/rdfs:subClassOf* ?objectclass .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventSubjectTypeConstraint
-omice:RelationModificationEventSubjectTypeConstraint rdf:type owl:NamedIndividual ,
-                                                              sh:SPARQLConstraint ;
-                                                     sh:message "A RelationModificationEvent class should concern an object class whose individuals may be subjects of modification." ;
-                                                     sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT  $this ?path ?entity
-WHERE {
-BIND(:ConcernsModificationAsSubject as ?path)
-NOT EXISTS {
-$this ?path ?entity .
-?entity a :ObjectType .
-}}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventTarget
-omice:RelationModificationEventTarget rdf:type owl:NamedIndividual ,
-                                               sh:SPARQLTarget ;
-                                      rdfs:comment "Targets all subclasses of RelationModificationEvent that are of type EventType" ;
-                                      sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a ?eventclass .
-?eventclass rdfs:subClassOf+ :RelationModificationEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventTypeShape
-omice:RelationModificationEventTypeShape rdf:type owl:NamedIndividual ,
-                                                  sh:NodeShape ;
-                                         rdfs:comment "Validates that all type restrictions on subclasses of RelationModificationEvent are being correctly modeled" ;
-                                         sh:property omice:RelationModificationEventObjectCardinality ,
-                                                     omice:RelationModificationEventSubjectCardinality ;
-                                         sh:sparql omice:ModificationEventRelationTypeConstraint ,
-                                                   omice:RelationModificationEventObjectTypeConstraint ,
-                                                   omice:RelationModificationEventSubjectTypeConstraint ;
-                                         sh:target omice:RelationModificationEventTypeTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#RelationModificationEventTypeTarget
-omice:RelationModificationEventTypeTarget rdf:type owl:NamedIndividual ,
-                                                   sh:SPARQLTarget ;
-                                          rdfs:comment "Targets all subclasses of QualityModificationEvent that are of type EventType" ;
-                                          sh:select """prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a :EventType ;
-             rdfs:subClassOf+ :RelationModificationEvent .
-}""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ReplicateTriplesRule
-omice:ReplicateTriplesRule rdf:type owl:NamedIndividual ,
-                                    sh:SPARQLRule ;
-                           sh:construct """
-                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-                                CONSTRUCT {
-                                            $this ?r ?o .
-                                }
-                                WHERE {
-                                            $this ?r ?o .
-                                }
-                                """ ;
-                           sh:order 1 .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#ReplicateUniversalsShape
-omice:ReplicateUniversalsShape rdf:type owl:NamedIndividual ,
-                                        sh:shape ;
-                               sh:rule omice:ReplicateTriplesRule ;
-                               sh:target omice:UniversalsTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#StepDecrementStateShape
-omice:StepDecrementStateShape rdf:type owl:NamedIndividual ,
-                                       sh:shape ;
-                              sh:rule omice:DiscardLossRelationsRule ,
-                                      omice:GainsRelationRule ;
-                              sh:target omice:PossibleLossIndividualsTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#StepIncrementStateShape
-omice:StepIncrementStateShape rdf:type owl:NamedIndividual ,
-                                       sh:shape ;
-                              sh:rule omice:CreationRule ,
-                                      omice:DiscardLossObjectsRule ,
-                                      omice:GainsQualityRule ,
-                                      omice:GainsRelationRule ;
-                              sh:target omice:UnnavoidableIndividualsTarget .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#UniversalsTarget
-omice:UniversalsTarget rdf:type owl:NamedIndividual ,
-                                sh:SPARQLTarget ;
-                       rdfs:comment "Targets all universals, including individuals created through punning, annotation properties, object properties and data properties" ;
-                       sh:select """
-prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-    {
-        ?entity a owl:Class ;
-                a owl:NamedIndividual .
-    }
-    UNION
-    {
-        ?entity ?p ?o .
-        FILTER NOT EXISTS {?entity a owl:NamedIndividual}
-    }
-}
-""" .
-
-
-###  https://hrssilva.github.io/ontology/omice.ttl#UnnavoidableIndividualsTarget
-omice:UnnavoidableIndividualsTarget rdf:type owl:NamedIndividual ,
-                                             sh:SPARQLTarget ;
-                                    rdfs:comment "Targets all individuals that do not loose properties or cease to exist by result of an EventType" ;
-                                    sh:select """
-prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
-prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-prefix owl: <http://www.w3.org/2002/07/owl#>
-prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?entity
-WHERE {
-?entity a owl:NamedIndividual .
-NOT EXISTS {?entity a owl:Class .}
-NOT EXISTS {
-    {
-    ?entity :SubjectModifiedBy | :BearerModifiedBy ?event .
-    ?event a ?ec .
-    ?ec :RemovesRelation ?p .
-    }
-    UNION
-    {
-    ?entity :DestroyedBy ?event .
-    }
-}
-}
-""" .
-
-
-###  Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi
