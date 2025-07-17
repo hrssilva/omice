@@ -45,6 +45,10 @@ omice:DomainDimension a owl:Class ;
     rdfs:subClassOf omice:TypeOfParticulars ;
     rdfs:comment "A dimension of a quality domain, forming a basis for vector representation." .
 
+omice:VectorComponent a owl:Class ;
+    rdfs:subClassOf omice:TypeOfParticulars ;
+    rdfs:comment "A scalar value associated with a domain dimension in an impetus vector." .
+
 omice:Event a owl:Class ;
     rdfs:subClassOf omice:TypeOfParticulars .
 
@@ -68,29 +72,28 @@ omice:QualityValueChangeEvent a owl:Class ;
     rdfs:subClassOf omice:QualityModificationEvent ;
     rdfs:comment "An event in which the value of a quality changes, potentially due to the manifestation of one or more dispositions." .
 
+### Structural Properties
 omice:affectsQuality a owl:ObjectProperty ;
     rdfs:domain omice:QualityValueChangeEvent ;
     rdfs:range omice:QualityType ;
     rdfs:comment "Specifies the quality affected by the value change." .
 
-omice:manifestedDisposition a owl:ObjectProperty ;
+omice:manifestsDisposition a owl:ObjectProperty ;
     rdfs:domain omice:QualityValueChangeEvent ;
     rdfs:range omice:DispositionType ;
     rdfs:comment "Indicates a disposition that manifests during the event and contributes to the change in quality." .
 
-### Structural Properties
 omice:influencesQuality a owl:ObjectProperty ;
     rdfs:domain omice:DispositionType ;
     rdfs:range omice:QualityType ;
     rdfs:comment "Indicates which quality type is influenced by a disposition." .
 
-omice:hasImpetusType a owl:ObjectProperty ;
-    rdfs:domain omice:DispositionType ;
-    rdfs:range omice:ImpetusType ;
+omice:hasImpetus a owl:ObjectProperty ;
+    rdfs:range omice:Impetus ;
     rdfs:comment "Relates a disposition type to its vector-based impetus over a quality domain." .
 
 omice:overDomain a owl:ObjectProperty ;
-    rdfs:domain omice:ImpetusType ;
+    rdfs:domain omice:Impetus ;
     rdfs:range omice:QualityDomain ;
     rdfs:comment "Declares the quality domain over which this impetus vector is defined." .
 
@@ -100,13 +103,9 @@ omice:hasDimension a owl:ObjectProperty ;
     rdfs:comment "Identifies dimensions within a quality domain." .
 
 omice:hasComponent a owl:ObjectProperty ;
-    rdfs:domain omice:ImpetusType ;
+    rdfs:domain omice:Impetus ;
     rdfs:range omice:VectorComponent ;
     rdfs:comment "Links an impetus vector to its component along a domain dimension." .
-
-omice:VectorComponent a owl:Class ;
-    rdfs:subClassOf omice:TypeOfParticulars ;
-    rdfs:comment "A scalar value associated with a domain dimension in an impetus vector." .
 
 omice:onDimension a owl:ObjectProperty ;
     rdfs:domain omice:VectorComponent ;
