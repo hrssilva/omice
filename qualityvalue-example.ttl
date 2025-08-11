@@ -1,0 +1,114 @@
+@prefix omice: <https://hrssilva.github.io/ontology/omice.ttl#> .
+@prefix omice-f: <https://hrssilva.github.io/ontology/omice-functions.ttl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix : <https://hrssilva.github.io/ontology/omice-functions.ttl#> .
+@base <https://hrssilva.github.io/ontology/omice-functions.ttl>
+
+# Classes
+omice-f:Position a owl:Class, omice-f:QualityType ;
+    rdfs:subClassOf gufo:Quality ;
+    omice-f:associatedWith omice-f:euclideanSpace .
+
+omice-f:Permeability a owl:Class, omice-f:DispositionType ;
+    rdfs:subClassOf omice-f:Disposition ;
+    omice-f:operatesOn omice-f:Position .
+    
+omice-f:Viscosity a owl:Class, omice-f:DispositionType ;
+    rdfs:subClassOf omice-f:Disposition ;
+    omice-f:operatesOn omice-f:Position .
+    
+omice-f:FluxPotential a owl:Class, omice-f:DispositionType ;
+    rdfs:subClassOf omice-f:Disposition ;
+    omice-f:operatesOn omice-f:Position .
+    
+omice-f:RockUnit a owl:Class ;
+    rdfs:subClassOf gufo:FunctionalComplex .
+
+omice-f:PortionOfOil a owl:Class ;
+    rdfs:subClassOf gufo:Quantity .
+
+omice-f:OilFlowEvent a owl:Class ;
+    rdfs:subClassOf omice-f:QualityValueModificationEvent .
+
+# Individuals
+omice-f:euclideanSpace a owl:NamedIndividual, omice-f:QualityDomain ;
+    omice-f:hasGeometry omice-f:darcy .
+
+omice-f:viscositySpace a owl:NamedIndividual, omice-f:VectorSpace .
+omice-f:permeabilitySpace a owl:NamedIndividual, omice-f:VectorSpace .
+omice-f:fluxSpace a owl:NamedIndividual, omice-f:VectorSpace .
+
+omice-f:positionInMeters a owl:NamedIndividual, omice-f:QualityDimension ;
+    omice-f:definedBy omice-f:euclideanSpace .
+
+omice-f:oil a owl:NamedIndividual, omice-f:PortionOfOil ;
+    omice:bearerModifiedBy omice-f:flow .
+
+omice-f:rock a owl:NamedIndividual, omice-f:RockUnit ;
+    gufo:participatedIn omice-f:flow .
+
+omice-f:viscosity a owl:NamedIndividual, omice-f:Viscosity ;
+    omice-f:hasReifiedImpetus omice-f:viscosityImpetus ;
+    omice-f:dispositionalContact omice-f:position ;
+    gufo:inheresIn omice-f:oil .
+
+omice-f:fluxPotential a owl:NamedIndividual, omice-f:FluxPotential ;
+    omice-f:hasReifiedImpetus omice-f:fluxImpetus ;
+    omice-f:dispositionalContact omice-f:position ;
+    gufo:inheresIn omice-f:oil .
+
+omice-f:permeability a owl:NamedIndividual, omice-f:Permeability ;
+    omice-f:hasReifiedImpetus omice-f:permeabilityImpetus ;
+    omice-f:dispositionalContact omice-f:position ;
+    gufo:inheresIn omice-f:rock .
+
+omice-f:position a owl:NamedIndividual, omice-f:Position ;
+    gufo:hasReifiedQualityValue omice-f:positionQuale ;
+    omice-f:qualityModifiedBy omice-f:flow ;
+    gufo:inheresIn omice-f:oil .
+
+omice-f:viscosityImpetus a owl:NamedIndividual, omice-f:Impetus ;
+    rdfs:member omice-f:viscositySpace ;
+    omice-f:hasReifiedValueComponent omice-f:viscosityComponent .
+
+omice-f:fluxImpetus a owl:NamedIndividual, omice-f:Impetus ;
+    rdfs:member omice-f:fluxSpace ;
+    omice-f:hasReifiedValueComponent omice-f:fluxComponent .
+
+omice-f:permeabilityImpetus a owl:NamedIndividual, omice-f:Impetus ;
+    rdfs:member omice-f:permeabilitySpace ;
+    omice-f:hasReifiedValueComponent omice-f:permeabilityComponent .
+
+omice-f:positionQuale a owl:NamedIndividual, gufo:QualityValue ;
+    rdfs:member omice-f:euclideanSpace ;
+    omice-f:hasReifiedValueComponent omice-f:positionComponent .
+
+omice-f:viscosityComponent a owl:NamedIndividual, omice-f:ValueComponent ;
+    omice-f:hasArgumentName "viscosity" ;
+    rdf:value 0.73.
+
+omice-f:permeabilityComponent a owl:NamedIndividual, omice-f:ValueComponent ;
+    omice-f:hasArgumentName "permeability" ;
+    rdf:value 0.0935.
+
+omice-f:fluxComponent a owl:NamedIndividual, omice-f:ValueComponent ;
+    omice-f:hasArgumentName "flux" ;
+    rdf:value 0.0014.
+
+omice-f:positionComponent a owl:NamedIndividual, omice-f:ValueComponent ;
+    rdfs:member omice-f:positionInMeters ;
+    rdf:value -2048.
+
+omice-f:darcy a owl:NamedIndividual, omice-f:PhiFunction ;
+    omice-f:hasArgument omice-f:viscositySpace ;
+    omice-f:hasArgument omice-f:fluxSpace ;
+    omice-f:hasArgument omice-f:permeabilitySpace ;
+    omice-f:valuedIn omice-f:positionInMeters ;
+    omice-f:implementedBy "#viscosity# / #permeability# * #flux#" .
+
+omice-f:flow a owl:NamedIndividual, omice-f:QualityValueModificationEvent .

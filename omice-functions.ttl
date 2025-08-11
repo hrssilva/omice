@@ -1,0 +1,289 @@
+@prefix omice: <https://hrssilva.github.io/ontology/omice.ttl#> .
+@prefix omice-f: <https://hrssilva.github.io/ontology/omice-functions.ttl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix : <https://hrssilva.github.io/ontology/omice-functions.ttl#> .
+@base <https://hrssilva.github.io/ontology/omice-functions.ttl>
+
+
+### Ontology Metadata
+<https://hrssilva.github.io/ontology/omice-functions.ttl> a owl:Ontology ;
+    #owl:imports <https://hrssilva.github.io/ontology/omice.ttl/v2> ;
+    #owl:imports <http://purl.org/nemo/gufo> ;
+    owl:versionIRI <https://hrssilva.github.io/ontology/omice-functions.ttl/v1> ;
+    owl:versionInfo "1.0" .
+
+
+### Event Classes
+
+omice-f:QualityValueModificationEvent a owl:Class ;
+    rdfs:subClassOf omice:QualityModificationEvent .
+
+### Maybe UFO things
+
+omice-f:QualityStructure a owl:Class ;
+    rdfs:subClassOf gufo:AbstractIndividual .
+
+omice-f:QualityDomain a owl:Class ;
+    rdfs:subClassOf gufo:QualityStructure .
+
+omice-f:QualityDimension a owl:Class, gufo:AbstractIndividualType ;
+    rdfs:subClassOf gufo:QualityStructure .
+
+omice-f:Disposition a owl:Class;
+    rdfs:subClassOf gufo:IntrinsicAspect .
+
+omice-f:AspectType a owl:Class;
+    rdfs:subClassOf gufo:EndurantType .
+
+omice-f:DispositionType a owl:Class;
+    rdfs:subClassOf omice-f:AspectType .
+
+omice-f:QualityType a owl:Class;
+    rdfs:subClassOf omice-f:AspectType .
+
+### Vector Classes
+
+omice-f:Impetus a owl:Class, gufo:AbstractIndividualType ;
+    rdfs:subClassOf gufo:AbstractIndividual .
+
+omice-f:VectorSpace a owl:Class, gufo:AbstractIndividualType ;
+    rdfs:subClassOf gufo:AbstractIndividual .
+
+omice-f:ValueComponent a owl:Class ;
+    rdfs:subClassOf gufo:AbstractIndividual .
+
+omice-f:PhiFunction a owl:Class ;
+    rdfs:subClassOf gufo:AbstractIndividual .
+
+### Object Properties
+
+omice-f:vectorSpaceOf a owl:ObjectProperty ;
+    rdfs:domain omice-f:VectorSpace ;
+    rdfs:range omice-f:QualityStructure .
+
+omice-f:definedBy a owl:ObjectProperty ;
+    rdfs:domain omice-f:QualityDimension ;
+    rdfs:range omice-f:QualityDomain .
+
+omice-f:hasArgument a owl:ObjectProperty ;
+    rdfs:domain omice-f:PhiFunction ;
+    rdfs:range omice-f:VectorSpace .
+
+omice-f:valuedIn a owl:ObjectProperty ;
+    rdfs:domain omice-f:PhiFunction ;
+    rdfs:range omice-f:QualityDimension . # This is a simplification, since we do not reify VectorDimension
+
+omice-f:hasGeometry a owl:ObjectProperty ;
+    rdfs:subPropertyOf owl:topObjectProperty ;
+    rdfs:domain omice-f:QualityStructure ;
+    rdfs:range omice-f:PhiFunction .
+
+omice-f:hasReifiedImpetus a owl:ObjectProperty ;
+    rdfs:subPropertyOf owl:topObjectProperty ;
+    rdfs:domain omice-f:Disposition ;
+    rdfs:range omice-f:Impetus .
+
+omice-f:hasReifiedValueComponent a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( omice-f:Impetus gufo:QualityValue ) ] ;
+    rdfs:range omice-f:ValueComponent .
+
+omice-f:operatesOn a owl:ObjectProperty ;
+    rdfs:domain omice-f:DispositionType ;
+    rdfs:range omice-f:QualityType .
+
+omice-f:dispositionalContact a owl:ObjectProperty ;
+    rdfs:domain omice-f:Disposition ;
+    rdfs:range gufo:Quality .
+
+omice-f:associatedWith a owl:ObjectProperty ;
+    rdfs:domain omice-f:QualityType ;
+    rdfs:range omice-f:QualityStructure .
+
+
+omice-f:qualityModifiedBy a owl:ObjectProperty ;
+    rdfs:domain gufo:Quality ;
+    rdfs:range omice-f:QualityModificationEvent .
+
+### Datatype Properties
+
+### Annotation Properties
+
+omice-f:implementedBy a owl:AnnotationProperty .
+
+omice-f:hasArgumentName a owl:AnnotationProperty .
+
+### SHACL Functions
+
+
+omice-f:replacePlaceholders a sh:SPARQLFunction ;
+	rdfs:comment "Replaces all placeholders in the style of '#<name>#' in $exp with the arguments of $phi." ;
+	sh:parameter [
+		sh:path omice-f:exp ;
+		sh:description "The expression with placeholders" ;
+	] ;
+	sh:parameter [
+		sh:path omice-f:phi ;
+		sh:description "The function with variables" ;
+	] ;
+	sh:returnType xsd:string ;
+	sh:select """
+                prefix omice-f: <https://hrssilva.github.io/ontology/omice-functions.ttl#> 
+                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+                prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+                SELECT ?result
+                WHERE {
+                
+                    OPTIONAL {
+                        SELECT ?newExp
+                        WHERE {
+                            $phi omice-f:hasArgument ?vs .
+                            ?imp rdfs:member ?vs ;
+                                omice-f:hasReifiedValueComponent ?arg .
+                            ?arg omice-f:hasArgumentName ?argname ;
+                                rdf:value ?val .
+
+                            BIND(CONCAT("#", ?argname, "#") as ?pattern)
+                            BIND(REPLACE($exp, ?pattern, STR(?val)) AS ?newExp)
+                            FILTER CONTAINS($exp, ?pattern)
+                        }
+                        LIMIT 1
+                    }
+                    BIND(IF(bound(?newExp), omice-f:replacePlaceholders(?newExp, $phi), $exp) as ?result)
+                }
+		"""  .
+
+omice-f:eval a sh:SPARQLFunction ;
+    rdfs:comment "Recursively evaluates a mathematical expression." ;
+    sh:parameter [
+        sh:path omice-f:expression ;
+        sh:description "The expression to evaluate." ;
+    ] ;
+    sh:returnType xsd:decimal ;
+    sh:select """
+        PREFIX omice-f: <https://hrssilva.github.io/ontology/omice-functions.ttl#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+        SELECT ?result
+        WHERE {
+            BIND($expression as ?input)
+            
+            
+            # Regex for evaluation of expressions
+            BIND("^([^(]*)[(](.+)[)]([^(]*)$" as ?regexPar)
+            BIND("^(.*[+-]?[ ]*[0-9]+[.]?[0-9]*[ ]*)([*/])([ ]*[+-]?[ ]*[0-9]+[.]?[0-9]*[^*/]*)$" as ?regexMul)
+            BIND("^(.*[+-]?[ ]*[0-9]+[.]?[0-9]*[ ]*)([+-])([ ]*[+-]?[ ]*[0-9]+[.]?[0-9]*[^+-]*)$" as ?regexAdd)
+            BIND("[ ]" as ?regexSpaces)
+            BIND("^([+-]?[ ]*)([0-9]+)([.]?)([0-9]*)$" as ?regexNum)
+
+            # Remove white spaces
+            BIND(REPLACE(?input, ?regexSpaces, "") as ?exp)
+
+            # Test if expression is balanced
+            BIND(REPLACE(?exp, "([^(]*)", "") as ?openPar)
+            BIND(REPLACE(?exp, "([^)]*)", "") as ?closePar)
+            BIND(if (STRLEN(?openPar) = STRLEN(?closePar), true, false) as ?balanced)
+            
+
+            # Extract group captured by parenthesis (for evaluation order) 
+            BIND(IF(REGEX(?exp, ?regexPar), REPLACE(?exp, ?regexPar, "$2"), ?exp) as ?captured)
+            
+            # Eval captured first
+            BIND(
+            IF(REGEX(?captured, ?regexNum),
+                xsd:decimal(?captured),
+                IF(REGEX(?captured, ?regexAdd), 
+                    IF(REPLACE(?captured, ?regexAdd, "$2") = "+",
+                        omice-f:eval(REPLACE(?captured, ?regexAdd, "$1")) + omice-f:eval(REPLACE(?captured, ?regexAdd, "$3")),
+                        omice-f:eval(REPLACE(?captured, ?regexAdd, "$1")) - omice-f:eval(REPLACE(?captured, ?regexAdd, "$3"))),
+
+                    IF(REGEX(?captured, ?regexMul),
+                        IF(REPLACE(?captured, ?regexMul, "$2") = "*",
+                            omice-f:eval(REPLACE(?captured, ?regexMul, "$1")) * omice-f:eval(REPLACE(?captured, ?regexMul, "$3")),
+                            omice-f:eval(REPLACE(?captured, ?regexMul, "$1")) / omice-f:eval(REPLACE(?captured, ?regexMul, "$3"))),
+                        "ERROR")
+                    )) as ?res)
+
+            BIND(IF(REGEX(?exp, ?regexPar), REPLACE(?exp, ?regexPar, "$1"), "") as ?freeLeft)
+            BIND(IF(REGEX(?exp, ?regexPar), REPLACE(?exp, ?regexPar, "$3"), "") as ?freeRight)
+            BIND(CONCAT(?freeLeft, str(?res), ?freeRight) as ?newExp)
+            BIND(IF(STRLEN(?freeLeft) > 0 || STRLEN(?freeRight) > 0, omice-f:eval(?newExp), ?res) as ?result)
+        }
+    """ .
+
+### SHACL Rules
+
+omice-f:QualityValueModificationRule a sh:SPARQLRule ;
+                   sh:construct """
+                                prefix : <https://hrssilva.github.io/ontology/omice.ttl#>
+                                prefix owl: <http://www.w3.org/2002/07/owl#>
+                                prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+                                prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+                                prefix omice-f: <https://hrssilva.github.io/ontology/omice-functions.ttl#> 
+                                prefix omice: <https://hrssilva.github.io/ontology/omice.ttl#> 
+                                prefix gufo: <http://purl.org/nemo/gufo#>
+                                prefix sh: <http://www.w3.org/ns/shacl#> 
+                                CONSTRUCT {
+                                    ?quale omice-f:hasReifiedValueComponent ?newVal .
+                                    ?newVal a omice-f:ValueComponent ;
+                                        rdfs:member ?dimension ;
+                                        rdf:value ?res .
+
+                                    ?newVal omice-f:hasArgumentName ?name.
+
+                                }
+                                WHERE {
+
+                                    $this ^omice:bearerModifiedBy ?bearer .
+                                    
+                                    ?quality gufo:inheresIn ?bearer ;
+                                        omice-f:qualityModifiedBy $this ;
+                                        gufo:hasReifiedQualityValue ?quale .
+                                    
+                                    ?quale rdfs:member ?qs ;
+                                        omice-f:hasReifiedValueComponent ?val .
+                                    ?qs omice-f:hasGeometry ?phi .
+                                    ?phi omice-f:valuedIn ?dimension .
+                                    ?dimension omice-f:definedBy ?qs .
+                                    ?val rdf:value ?v ;
+                                        rdfs:member ?dimension .
+                                    OPTIONAL {
+                                        ?val omice-f:hasArgumentName ?name .
+                                    }
+
+                                    ?phi omice-f:implementedBy ?exp .
+                                    BIND(omice-f:replacePlaceholders(?exp, ?phi) as ?op)
+                                    BIND(omice-f:eval(?op) as ?vec)
+                                    BIND(?v + ?vec as ?res) # Partial path function
+                                    BIND(UUID() as ?newVal)
+                                    FILTER( str(?vec) != "ERROR" )
+
+                                }
+                                """ ;
+                   sh:order 0 .
+
+### SHACL Targets
+
+omice-f:QualityValueModificationTarget a sh:SPARQLTarget ;
+    sh:select """
+    prefix omice-f: <https://hrssilva.github.io/ontology/omice-functions.ttl#> 
+    prefix owl: <http://www.w3.org/2002/07/owl#>
+    prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+    prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+    SELECT ?individual
+    WHERE {
+        ?individual a/rdfs:subClassOf* omice-f:QualityValueModificationEvent .
+    }
+    """ .
+
+
+### SHACL Shapes
+
+omice-f:QualityValueModificationShape a sh:shape ;
+    sh:rule omice-f:QualityValueModificationRule ;
+    sh:target omice-f:QualityValueModificationTarget ;
+    sh:order 0 .
